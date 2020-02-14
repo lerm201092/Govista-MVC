@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="./chartist.min.css">
+    <script src="./chartist.min.js"></script>
+  </head>
+  <body>
+	<div class="ct-chart ct-perfect-fourth" style="width:250px"></div>
+	<script>
+		var data = {
+		  labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+		  series: [    [5, 2, 4, 2, 0]  ]
+		};
+		new Chartist.Line('.ct-chart', data);
+	</script>
+  </body>
+</html>

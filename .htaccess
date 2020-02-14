@@ -1,0 +1,66 @@
+php_value display_errors on
+<IfModule mod_rewrite.c>
+# Activar RewriteEngine
+RewriteEngine on
+RewriteBase /
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteCond %{SCRIPT_FILENAME} !-f
+
+#views
+RewriteRule ^/$ app/view/auth/login.php
+RewriteRule ^apps/$ app/view/auth/login.php
+RewriteRule ^apps$ app/view/auth/login.php
+RewriteRule ^apps/login$ app/view/auth/login.php
+RewriteRule ^apps/logout$ app/controller/auth/logout.php
+
+RewriteRule ^apps/rol-medico/estadisticas/resumen$      app/view/modulos/medico/resumen.php
+
+RewriteRule ^apps/rol-medico/pacientes/listado$   app/view/modulos/medico/pacientes/listado.php
+RewriteRule ^apps/rol-medico/pacientes/nuevo$   app/view/modulos/medico/pacientes/crear.php
+RewriteRule ^apps/rol-medico/pacientes/ver/([0-9]+)$   app/view/modulos/medico/pacientes/ver.php?id=$1
+RewriteRule ^apps/rol-medico/pacientes/editar/([0-9]+)$   app/view/modulos/medico/pacientes/editar.php?id=$1
+
+RewriteRule ^apps/rol-medico/citas/listado$   app/view/modulos/medico/citas/listado.php
+RewriteRule ^apps/rol-medico/citas/ver/([0-9]+)$   app/view/modulos/medico/citas/ver.php?id=$1
+RewriteRule ^apps/rol-medico/citas/nuevo$   app/view/modulos/medico/citas/crear.php
+RewriteRule ^apps/rol-medico/citas/editar/([0-9]+)$   app/view/modulos/medico/citas/editar.php?id=$1
+
+RewriteRule ^apps/rol-medico/historias/listado$   app/view/modulos/medico/historias/listado.php
+RewriteRule ^apps/rol-medico/historias/ver/([0-9]+)$   app/view/modulos/medico/historias/ver.php?id=$1
+RewriteRule ^apps/rol-medico/historias/crear/([0-9]+)$   app/view/modulos/medico/historias/crear.php?id=$1
+
+RewriteRule ^apps/rol-paciente/estadisticas/resumen$      app/view/modulos/paciente/resumen.php
+RewriteRule ^apps/rol-paciente/citas/listado$   app/view/modulos/paciente/citas/listado.php
+RewriteRule ^apps/rol-paciente/citas/ver/([0-9]+)$    app/view/modulos/paciente/citas/ver.php?id=$1
+RewriteRule ^apps/rol-paciente/ejercicios/listado$   app/view/modulos/paciente/ejercicios/listado.php
+RewriteRule ^apps/rol-paciente/ejercicios/play/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)$   app/view/modulos/paciente/ejercicios/play.php?id=$1&id_exercise=$2&duration=$3&size=$4&idhis=$5
+
+
+RewriteRule ^apps/rol-administrador/estadisticas/resumen$      app/view/modulos/administrador/resumen.php
+RewriteRule ^apps/rol-administrador/empresas/listado$   app/view/modulos/administrador/empresas/listado.php
+RewriteRule ^apps/rol-administrador/empresas/ver/([0-9]+)$    app/view/modulos/administrador/empresas/ver.php?id=$1
+RewriteRule ^apps/rol-administrador/empresas/editar/([0-9]+)$    app/view/modulos/administrador/empresas/editar.php?id=$1
+RewriteRule ^apps/rol-administrador/empresas/nuevo$   app/view/modulos/administrador/empresas/crear.php
+
+
+
+#sources
+RewriteRule ^apps/img/(.*) sources/img//$1
+RewriteRule ^apps/css/(.*) sources/css//$1
+RewriteRule ^apps/js/(.*) sources/js//$1
+RewriteRule ^apps/juegos/(.*) juegos//$1
+
+#node_modulos
+RewriteRule ^apps/node/(.*) node_modules//$1
+
+#controller
+RewriteRule ^apps/controller/usuario$ app/controller/UsuarioController.php
+RewriteRule ^apps/controller/ejercicio$ app/controller/EjercicioController.php
+RewriteRule ^apps/controller/resumen$ app/controller/resumenController.php
+RewriteRule ^apps/controller/paciente$ app/controller/PacienteController.php
+RewriteRule ^apps/controller/citas$ app/controller/CitaController.php
+RewriteRule ^apps/controller/empresa$ app/controller/EmpresaController.php
+RewriteRule ^apps/controller/historia$ app/controller/HistoriaClinicaController.php
+
+</ifmodule> 
+

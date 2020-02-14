@@ -1,0 +1,65 @@
+.card{
+    margin-bottom:25px;
+}
+.iconos-cajas{
+    color: white;
+    border-radius: 2px;
+    -webkit-box-shadow: 0px 1px 15px -7px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 1px 15px -7px rgba(0,0,0,0.75);
+    box-shadow: 0px 1px 15px -7px rgba(0,0,0,0.75);
+    position: absolute;
+    top: -18px;
+    padding: 0;
+    text-align: center;
+    font-size: 20px;
+    line-height: 53px;
+    width: 50px;
+    height: 50px;
+}
+
+.iconos-cajas span{
+    font-size: 20px!important;
+}
+
+.titulos-cajas{
+    font-size:14px; 
+    color: gray;
+    margin-bottom:0px;
+}
+
+.valores-cajas{
+    font-size:20px; 
+    font-weight: 600; 
+    margin-top:0;
+    margin-bottom:2px;
+}
+
+.bg-verde{
+    background:#5eb562; 
+}
+
+.bg-amarillo{
+    background:#fc9208; 
+}
+
+.bg-rojo{
+    background:#ec4a47; 
+}
+
+.bg-azul{
+    background:#12b8cd; 
+}
+
+.ct-series-a .ct-line, .ct-series-a .ct-point  {
+    /* Set the colour of this series line */
+    stroke: #9c27b0;
+    /* Control the thikness of your lines */
+    stroke-width: 5px;
+  }
+  
+  .ct-series-a .ct-point  {
+    /* Set the colour of this series line */
+    stroke: #9c27b0;
+    /* Control the thikness of your lines */
+    stroke-width: 10px;
+  }

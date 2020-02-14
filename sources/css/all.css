@@ -1,0 +1,54 @@
+*{
+    font-family: calibri;
+}
+
+.row{
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.bg-verde{
+background:#5eb562; 
+}
+
+.bg-amarillo{
+background:#fc9208; 
+}
+
+.bg-rojo{
+background:#ec4a47; 
+}
+
+.bg-azul{
+background:#12b8cd; 
+}
+
+.bg-morado{
+background:#9c27b0; 
+}
+
+
+.cl-verde{
+color:#5eb562; 
+}
+
+.cl-amarillo{
+color:#fc9208; 
+}
+
+.cl-rojo{
+color:#ec4a47; 
+}
+
+.cl-azul{
+color:#12b8cd; 
+}
+
+.cl-morado{
+color:#9c27b0; 
+}
+
+.cl-morado-light{
+    color:#a088a4; 
+}
+
