@@ -170,7 +170,7 @@
                         <div class="col-xl-6">
 							<div class="mat-div is-completed">
                                 <label for="first-name" class="mat-label">NIT</label>
-                                <input type="text" required class="mat-input" name="nit" />
+                                <input type="text" disabled class="mat-input" name="nit" />
 							</div>
 						</div>
 						<div class="col-xl-6">
@@ -220,7 +220,8 @@
                         </div>
                     </div>
                     <input type="hidden" name="estado" value="AC" />
-                    <input type="hidden" name="addcoduser" value="<?=(USERNAME)?>" />
+                    <input type="hidden" name="modcoduser" value="<?=(USERNAME)?>" />
+                    <input type="hidden" name="id" value="<?=($_GET["id"])?>" />
 
                     <div class="row pt-4">
 						<div class="col-12 text-right">
@@ -252,6 +253,35 @@
       $(this).parent().removeClass("is-active");
     })
 
+    function pre_carga(){
+        cargando(); 
+        var sw = 0;
+        var id_paciente = "<?=($_GET['id'])?>";
+        id_paciente = id_paciente.trim();
+        var parametros = { "id" : id_paciente };
+        
+        var url = '/apps/controller/empresa';
+        var data = { funcion: "pre_editar", parametros: parametros };
+        var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
+        fetch(url, miInit).then(res => res.json()).catch(error =>  {
+            console.log(error);
+            swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
+        }).then(resp => {
+            console.log(resp);
+            var campos = Object.keys(resp);
+            $("#dpto").val(resp["dpto"]);
+            campos.forEach(item => {
+                if($("input[name="+item+"]")){
+                    $("input[name="+item+"]").val(resp[item]);
+                }else{
+                    $("select[name="+item+"]").val(resp[item]);
+                }
+            });
+            cargar_munic(resp.id_area);
+            setTimeout(() => { swal.close(); });
+        });
+    }
+
 
     function cargar_dpto(){
         var url = '/apps/controller/empresa';
@@ -262,17 +292,16 @@
             swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
         }).then(resp => {
             var html = "<option value=' '>- Escoja una opcion -</option>";
-            if(resp){
-                resp.forEach(function(arr){ html += "<option value='"+arr["name"]+"'>"+arr["value"]+"</option>"; }); 
-            }
+            if(resp){ resp.forEach(function(arr){ html += "<option value='"+arr["name"]+"'>"+arr["value"]+"</option>"; });  }
+            pre_carga();
             $("#dpto").html(html);
         });
     }
 
-    function cargar_munic(cb_dpto, cb_munic){
+    function cargar_munic(mun){
         cargando();
         var sw = 0;
-        var dpto = $("#"+cb_dpto).val();
+        var dpto = $("#dpto").val();
         var parametros = { "dpto" : dpto };
 
         var url = '/apps/controller/paciente';
@@ -283,11 +312,11 @@
             swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
         }).then(resp => {
             var html = "<option value=''>- Escoja una opción -</option>";
-            resp.forEach(function(arr){ html += "<option value='"+arr["name"]+"'>"+arr["value"]+"</option>"; });  
-            $("#"+cb_munic).html(html); 
+            resp.forEach(function(arr){ html += "<option "+(arr["name"] == mun ? 'selected ' : '')+"value='"+arr["name"]+"'>"+arr["value"]+"</option>"; });  
+            $("#id_area").html(html); 
             setTimeout(() => {
                 swal.close();
-            }, 200); 
+            }, 200);
         });
     }
 
@@ -310,16 +339,22 @@
         cargando();
         var parametros = $("#form-empresas").serializeArray();
         var url    = '/apps/controller/empresa';
-        var data   = { funcion: "crear", parametros: parametros };
+        var data   = { funcion: "editar", parametros: parametros };
         var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
         fetch(url, miInit).then(res => res.json()).catch(error =>  {
             console.log(error);
-            swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
+            swal("GoVista", "¡Se ha generado un xxx error en el servidor, por favor contacte al administrador!", "error");
         }).then(resp => {
-            swal('¡Registro guardado satisfactoriamente!', { closeOnClickOutside: false, buttons: false, icon : "success"}); 
-            setTimeout(() => {
-                location.href = "/apps/rol-administrador/empresas/listado";
-            }, 3000);
+            if( resp.toUpperCase() == "OK"){
+                swal('¡Registro guardado satisfactoriamente!', { closeOnClickOutside: false, buttons: false, icon : "success"}); 
+                setTimeout(() => {
+                    location.href = "/apps/rol-administrador/empresas/listado";
+                }, 3000);   
+            }else{
+                console.log(resp);
+                swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
+            }
+
         });           
     }
 

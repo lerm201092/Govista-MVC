@@ -45,7 +45,7 @@
     
         public function admin_listar( $offset, $estado ){
             if($estado != "ALL"){ $estado =" WHERE estado = '".$estado."'"; }else{ $estado = ""; }
-            $consulta = "SELECT * FROM empresas ".$estado." ORDER BY nombre ASC LIMIT 15 OFFSET ".$offset;
+            $consulta = "SELECT * FROM empresas ".$estado." ORDER BY id DESC LIMIT 15 OFFSET ".$offset;
             $stmt = $this->db ->prepare($consulta);
             try { 
                 $total = 0;
@@ -63,7 +63,7 @@
             $consulta = 'SELECT e.*,  a.padre AS dpto
                         FROM empresas e 
                             LEFT JOIN areas a ON a.id = e.id_area
-                        WHERE p.id = '.$id;
+                        WHERE e.id = '.$id;
 
             $stmt = $this->db->prepare($consulta);
             $stmt->execute();
@@ -109,6 +109,36 @@
             $stmt = $this->db->prepare($consulta);
             if($stmt->execute()){
                 $this->resp[] = "ok";
+            };
+            return $this->resp;         
+        }
+
+        public function editar($parametros){
+            $set  = "";
+            $id = null;
+            foreach ($parametros as $item) {
+                if($item["name"] != "id" ){
+                    $set .= " ".$item["name"]." = '".$item["value"]."',";
+                }else{
+                    $id = $item["value"];
+                }
+            }
+            $set = substr($set, 0, -1);
+            $consulta = "UPDATE empresas SET ".$set." WHERE id = ".$id;
+            // echo $consulta;
+            $stmt = $this->db->prepare($consulta);
+            if($stmt->execute()){
+                $this->resp = "OK";
+            };
+            return $this->resp;         
+        }
+
+        public function cambiar_estado($id, $estado){
+            $this->resp = array();
+            $consulta = "UPDATE empresas SET estado = '".$estado."' WHERE id = ".$id;
+            $stmt = $this->db->prepare($consulta);
+            if($stmt->execute()){
+                $this->resp = "OK";
             };
             return $this->resp;         
         }

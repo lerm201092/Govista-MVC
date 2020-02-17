@@ -2,7 +2,6 @@
     require '../model/ConectarDB.php';
     require '../model/modulos/EmpresaModel.php';
 
-
     header('Access-Control-Allow-Origin: *');
     header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
@@ -18,6 +17,7 @@
             echo json_encode($funcion());
         }       
     } 
+
 
     function cargar_dpto(){
         $empresa = new EmpresaModel;
@@ -48,14 +48,30 @@
     function crear($parametros){ 
         $empresa = new EmpresaModel;
         $resp = $empresa->crear($parametros);
-        return $parametros;
+        return $resp;
+    }
+
+    function editar($parametros){ 
+        $empresa = new EmpresaModel;
+        $resp = $empresa->editar($parametros);
+        return $resp;
     }
     
+    function cambiar_estado($parametros){ 
+        $empresa = new EmpresaModel;
+        $id     = $parametros["id"];
+        $estado = $parametros["estado"];
+        $resp = $empresa->cambiar_estado($id, $estado);
+        return $resp;
+    }
+    
+    
+
 
     function pre_editar($parametros){ 
-        $cita = new CitaModel;
+        $empresa = new EmpresaModel;
         $id = $parametros["id"];
-        $resp = $cita->pre_editar($id);
+        $resp = $empresa->pre_editar($id);
         return $resp;
     }
 

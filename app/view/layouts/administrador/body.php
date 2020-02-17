@@ -76,7 +76,7 @@
                 </a>
             </li> 
             <li class="nav-item" id="li-empresas">
-                <a href="javascript:void(0)" onclick="alert('Funcion en desarrollo')" class="nav-link">
+                <a href="/apps/rol-administrador/usuarios/listado" class="nav-link">
                 <span class="nav-icon fas fa-users-cog"></span>
                 <p>
                     Usuarios
