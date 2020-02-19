@@ -75,7 +75,7 @@
                 </p>
                 </a>
             </li> 
-            <li class="nav-item" id="li-empresas">
+            <li class="nav-item" id="li-usuarios">
                 <a href="/apps/rol-administrador/usuarios/listado" class="nav-link">
                 <span class="nav-icon fas fa-users-cog"></span>
                 <p>

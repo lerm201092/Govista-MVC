@@ -71,6 +71,33 @@
 
         }
 
+        public function admin_cant(){
+            $this->resp = array();
+            $consulta = "SELECT count(*) as cant
+                        FROM users";
+            $stmt = $this->db->prepare($consulta);
+            $stmt->execute();
+            if ($arr = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $this->resp = $arr["cant"];
+            }
+            return $this->resp;
+        }
+
+        public function admin_listar($offset){
+            $this->resp = array();
+            $consulta = "SELECT  u.*, r.descripcion as descrol
+                        FROM users u
+                            LEFT JOIN roles r ON r.id = u.roluser
+                        ORDER BY name1 DESC LIMIT 15 OFFSET ".$offset;
+            $stmt = $this->db->prepare($consulta);
+            $stmt->execute();
+            while ($arr = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $this->resp[] = $arr;
+            }
+            return $this->resp;
+        }
+        
+
         function id_medico($id){
             $resp = null;
             $consulta = 'SELECT id FROM medicos WHERE id_user = "'.$id.'"';
@@ -94,11 +121,45 @@
         }
 
 
+        public function admin_ver($id){
+            $consulta = "SELECT  u.*, r.descripcion as descrol,
+                            CONCAT(UPPER(SUBSTRING(a1.nomarea,1,1)),LOWER(SUBSTRING(a1.nomarea,2))) AS muni,
+                            CONCAT(UPPER(SUBSTRING(a2.nomarea,1,1)),LOWER(SUBSTRING(a2.nomarea,2))) AS dpto,
+                            CASE 
+                                WHEN u.estado = 'AC' THEN 'Activo'
+                                ELSE 'Inactivo'
+                            END AS  estado_f
+                        FROM users u
+                            LEFT JOIN roles r ON r.id = u.roluser
+                            LEFT JOIN areas AS a1 ON u.id_area = a1.id
+                            LEFT JOIN areas AS a2 ON a1.padre = a2.id
+                        WHERE u.id = ".$id;
+            $stmt = $this->db->prepare($consulta);
+            $stmt->execute();
+            if ($arr = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $this->resp = $arr;                 
+            }
+            return $this->resp;             
+        }
+
+
+
+
         function recibe_array($array){
             $params = array();
             parse_str($array, $params);
             return $params;            
         }
+
+
+
+
+
+
+
+
+
+
     }
 
 ?>

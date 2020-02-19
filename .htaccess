@@ -43,7 +43,7 @@ RewriteRule ^apps/rol-administrador/empresas/editar/([0-9]+)$    app/view/modulo
 RewriteRule ^apps/rol-administrador/empresas/nuevo$   app/view/modulos/administrador/empresas/crear.php
 
 RewriteRule ^apps/rol-administrador/usuarios/listado$   app/view/modulos/administrador/usuarios/listado.php
-
+RewriteRule ^apps/rol-administrador/usuarios/ver/([0-9]+)$    app/view/modulos/administrador/usuarios/ver.php?id=$1
 
 
 

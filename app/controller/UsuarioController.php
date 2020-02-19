@@ -13,23 +13,40 @@
         $funcion = $params['funcion'];
         if(isset($params['parametros']) && !empty($params['parametros'])) {
             $parametros = $params['parametros'];
-            $funcion($parametros);
+            echo json_encode($funcion($parametros));
         }else{
-            $funcion();
+            echo json_encode($funcion());
         }       
     } 
 
     function autenticar($parametros){ 
         $usuario = new UsuarioModel;
-        $auth = $usuario->autenticar($parametros);
-        $resp = json_encode($auth);
-        echo $resp;
+        $resp = $usuario->autenticar($parametros);
+        return $resp;
+    }  
+
+    function listar($parametros){ 
+        $usuario = new UsuarioModel;
+        $cant_reg_x_page = 15;
+        $num_page       = $parametros["pagina"];
+        $cant_pacientes = $usuario->admin_cant();
+        // return $cant_pacientes;
+        $cant_max_page  = ceil($cant_pacientes/$cant_reg_x_page);     
+        $offset = ($num_page-1) * $cant_reg_x_page;
+        $resp["cant_max"]  = $cant_max_page;
+        $resp["usuarios"]   = $usuario->admin_listar($offset);             
+        return $resp;
     }  
 
     function userEmpresa($parametros){ 
         $usuario = new UsuarioModel;
-        $auth = $usuario->userEmpresa($parametros);
-        $resp = json_encode($auth);
-        echo $resp;
+        $resp = $usuario->userEmpresa($parametros);
+        return $resp;
     }  
+
+    function ver($parametros){
+        $usuario = new UsuarioModel;
+        $resp = $usuario->admin_ver($parametros["id"]);
+        return $resp;
+    }
 ?>

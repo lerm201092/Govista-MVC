@@ -234,7 +234,7 @@ ul#tabs-ver .nav-item .nav-link{
 <div class="row px-4" id="contenedor_principal">
     <div class="col-12 card px-0">
         <div class="card-header mx-0">
-            <h5 class="mb-0">Listado De empresas registradas</h5>
+            <h5 class="mb-0">Listado De usuarios registradas</h5>
         </div>
         <div class="card-body">
                 <!-- link de los tabs -->
@@ -244,11 +244,12 @@ ul#tabs-ver .nav-item .nav-link{
                 <!-- contenedor de los tabs -->
                 <table id="tbl-pacientes" class="table table-sm table-striped table-bordered">
                     <thead class="text-primary">
-                        <th class="d-none d-sm-none d-md-table-cell">NIT</th>
-                        <th>Nombre</th>
-                        <th>Dirección</th>
+                        <th class="d-none d-sm-none d-md-table-cell">Identificacion</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th class="d-none d-sm-none d-md-table-cell">Usuario</th>
                         <th class="d-none d-sm-none d-md-table-cell">Email</th>
-                        <th class="d-none d-sm-none d-md-table-cell">Estado</th>
+                        <th class="d-none d-sm-none d-md-table-cell">Rol</th>
                         <th></th>
                     </thead>
                     <tbody id="tbody_historias">
@@ -277,7 +278,7 @@ ul#tabs-ver .nav-item .nav-link{
 <?php include "../../../layouts/administrador/footer.php";?>
 <!-- scripts -->
 <script>
-    $("#li-empresas").addClass("active");
+    $("#li-usuarios").addClass("active");
     listar(1);
     function listar(pagina){
         if(pagina == 1){
@@ -285,8 +286,7 @@ ul#tabs-ver .nav-item .nav-link{
             $("#li-anterior").addClass("disabled");
             $("#li-primero").addClass("disabled");
         }
-
-        var url = '/apps/controller/empresa';
+        var url = '/apps/controller/usuario';
         var parametros = { "pagina" : pagina };
         var data = { funcion : "listar", parametros : parametros };
         var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
@@ -308,21 +308,21 @@ ul#tabs-ver .nav-item .nav-link{
                 $("#li-ultimo").removeClass("disabled");
             }
 
-            if(resp.empresas.length == 0){
+            if(resp.usuarios.length == 0){
                 html = "<tr><td colspan='7'><b>No hay registros</b></td></tr>";
             }
 
-            for(var i=0; i < resp.empresas.length; i++){
+            for(var i=0; i < resp.usuarios.length; i++){
                 html+="<tr>";
-                html+="<td>"+(resp.empresas[i].nit ? resp.empresas[i].nit : '')+"</td>";
-                html+="<td>"+(resp.empresas[i].nombre ? resp.empresas[i].nombre : '')+"</td>";
-                html+="<td>"+(resp.empresas[i].direccion ? resp.empresas[i].direccion : '')+"</td>";
-                html+="<td>"+(resp.empresas[i].email ? resp.empresas[i].email : '')+"</td>";
-                html+="<td id='td_est_"+resp.empresas[i].id+"'>"+(resp.empresas[i].estado ? resp.empresas[i].estado : '')+"</td>";
+                html+="<td>("+resp.usuarios[i].tipodoc+" ) "+resp.usuarios[i].numdoc+"</td>";
+                html+="<td>"+( resp.usuarios[i].name1 ?? '')+" "+(resp.usuarios[i].name2 ?? '')+"</td>";
+                html+="<td>"+( resp.usuarios[i].surname1 ?? '' )+" "+( resp.usuarios[i].surname2 ?? '' )+"</td>";
+                html+="<td>"+( resp.usuarios[i].username ?? '' )+"</td>";
+                html+="<td>"+( resp.usuarios[i].email ?? '' )+"</td>";
+                html+="<td>"+( resp.usuarios[i].descrol ?? '' )+"</td>";
                 html+="<td>";
-                    html+="<a disabled href='/apps/rol-administrador/empresas/ver/"+resp.empresas[i].id+"' class='cl-azul mx-1'><i class='fas fa-eye'></i></a>";
-                    html+="<a disabled href='/apps/rol-administrador/empresas/editar/"+resp.empresas[i].id+"' class='cl-amarillo mx-1 mr-2'><i class='fas fa-edit'></i></a>  ";
-                    html+=`<a id='a_est_`+resp.empresas[i].id+`' disabled href="javascript:cambiar_estado(`+resp.empresas[i].id+`, '`+resp.empresas[i].estado+`')" class="cl-`+(resp.empresas[i].estado == 'AC' ? 'rojo' : 'verde')+` mx-1"><i id="i_est_`+resp.empresas[i].id+`" class="`+(resp.empresas[i].estado == 'AC' ? 'fas fa-minus-circle' : '	fas fa-power-off')+`"></i></a>`;
+                    html+="<a disabled href='/apps/rol-administrador/usuarios/ver/"+resp.usuarios[i].id+"' class='cl-azul mx-1'><i class='fas fa-eye'></i></a>";
+                    html+="<a disabled href='/apps/rol-administrador/empresas/editar/"+resp.usuarios[i].id+"' class='cl-amarillo mx-1 mr-2'><i class='fas fa-edit'></i></a>  ";
                 html+="</td>";
                 html+="</tr>";
             }
