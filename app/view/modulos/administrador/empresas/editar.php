@@ -219,7 +219,7 @@
                             </div>  
                         </div>
                     </div>
-                    <input type="hidden" name="estado" value="AC" />
+                    <input type="hidden" name="state" value="AC" />
                     <input type="hidden" name="modcoduser" value="<?=(USERNAME)?>" />
                     <input type="hidden" name="id" value="<?=($_GET["id"])?>" />
 
@@ -242,47 +242,19 @@
 <script type="text/javascript" src="/apps/node/datetimepicker/js/bootstrap-datetimepicker.es.js" charset="UTF-8"></script>
 <script>
   $("#li-empresas").addClass("active");
-  cargar_dpto();
+
   $(".mat-input").focus(function(){
     $(this).parent().addClass("is-active is-completed");
   });
 
-  $(".mat-input").focusout(function(){
-    if($(this).val() === "")
-      $(this).parent().removeClass("is-completed");
-      $(this).parent().removeClass("is-active");
+    $(".mat-input").focusout(function(){
+        if($(this).val() === "")
+        $(this).parent().removeClass("is-completed");
+        $(this).parent().removeClass("is-active");
     })
 
-    function pre_carga(){
-        cargando(); 
-        var sw = 0;
-        var id_paciente = "<?=($_GET['id'])?>";
-        id_paciente = id_paciente.trim();
-        var parametros = { "id" : id_paciente };
-        
-        var url = '/apps/controller/empresa';
-        var data = { funcion: "pre_editar", parametros: parametros };
-        var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
-        fetch(url, miInit).then(res => res.json()).catch(error =>  {
-            console.log(error);
-            swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
-        }).then(resp => {
-            console.log(resp);
-            var campos = Object.keys(resp);
-            $("#dpto").val(resp["dpto"]);
-            campos.forEach(item => {
-                if($("input[name="+item+"]")){
-                    $("input[name="+item+"]").val(resp[item]);
-                }else{
-                    $("select[name="+item+"]").val(resp[item]);
-                }
-            });
-            cargar_munic(resp.id_area);
-            setTimeout(() => { swal.close(); });
-        });
-    }
 
-
+    cargar_dpto();
     function cargar_dpto(){
         var url = '/apps/controller/empresa';
         var data = { funcion : 'cargar_dpto', parametros : { } };
@@ -298,13 +270,41 @@
         });
     }
 
+    function pre_carga(){
+        cargando(); 
+        var url = '/apps/controller/empresa';
+        var data = { funcion : "ver", parametros : {'id' : '<?=($_GET['id'])?>' } };
+        var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
+        fetch(url, miInit).then(res => res.json()).catch(error =>  {
+            console.log(error);
+            swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
+        }).then(resp => {
+            console.log(resp);
+            var campos = Object.keys(resp);
+            console.log(campos);
+            $("#dpto").val(resp["dpto"]);
+            campos.forEach(item => {
+                if( $("input[name="+item+"]").length > 0){
+                    $("input[name="+item+"]").val(resp[item]);
+                }else{
+                    $("select[name="+item+"]").val(resp[item]);
+                }
+            });
+            cargar_munic(resp.id_area);
+            setTimeout(() => { swal.close(); });
+            setTimeout(() => {
+                swal.close();
+            }, 200);
+        });
+    }
+
     function cargar_munic(mun){
         cargando();
         var sw = 0;
         var dpto = $("#dpto").val();
         var parametros = { "dpto" : dpto };
 
-        var url = '/apps/controller/paciente';
+        var url = '/apps/controller/empresa';
         var data = { funcion: "cargar_munic", parametros: parametros };
         var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
         fetch(url, miInit).then(res => res.json()).catch(error =>  {
@@ -345,17 +345,48 @@
             console.log(error);
             swal("GoVista", "¡Se ha generado un xxx error en el servidor, por favor contacte al administrador!", "error");
         }).then(resp => {
-            if( resp.toUpperCase() == "OK"){
+            if( resp == "OK"){
                 swal('¡Registro guardado satisfactoriamente!', { closeOnClickOutside: false, buttons: false, icon : "success"}); 
                 setTimeout(() => {
                     location.href = "/apps/rol-administrador/empresas/listado";
                 }, 3000);   
             }else{
-                console.log(resp);
-                swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
+                const wrapper = document.createElement('p');
+                wrapper.innerHTML = Exception(resp);
+                swal({
+                    title: "GoVista",
+                    content: wrapper, 
+                    icon: "warning"
+                });
             }
 
         });           
+    }
+
+    function Exception(arr){
+        if( arr["errorInfo"] ){
+            if( arr["errorInfo"][0] == '23000' ){
+                console.log();
+                var array = TextoComillas(arr["errorInfo"][2]);
+                var campo = array[1], valor = array[0];
+                var mensaje = "<p>¡Advertencia, El campo <b><i>'"+campo+"'</i></b> con valor <b><i>'"+valor+"'</i></b> ya se encuentra registrado.!</p>";
+                return mensaje;
+            }
+        }
+        return "¡Se ha generado un error en el servidor, por favor contacte al administrador!";
+    }
+
+    function TextoComillas(texto) {
+        const regex = /[^'"\\]*(?:\\.[^'"\\]*)*(["'])([^"'\\]*(?:(?:(?!\1)["']|\\.)[^"'\\]*)*)\1/gy;
+        var   grupo,
+            resultado = [];
+        
+        while ((grupo = regex.exec(texto)) !== null) {
+            //el grupo 1 contiene las comillas utilizadas
+            //el grupo 2 es el texto dentro de éstas
+            resultado.push(grupo[2]);
+        }
+        return resultado;
     }
 
 </script>

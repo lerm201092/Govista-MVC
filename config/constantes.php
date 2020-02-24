@@ -70,7 +70,7 @@
 
     'roles_users' => [
         '1' => 'Admnistrador',
-        '2' => 'Admon. Medico',
+        '2' => 'Padre de familia',
         '3' => 'Medico',
         '4' => 'Paciente'
     ],

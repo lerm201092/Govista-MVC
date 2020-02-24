@@ -1,10 +1,6 @@
 <?php 
 
-    require '../model/modulos/PacienteModel.php';
-    require '../model/modulos/CitaModel.php';
-    require '../model/modulos/EjercicioModel.php';
-    require '../model/modulos/MedicoModel.php';
-    require '../model/modulos/EmpresaModel.php';
+    require '../model/modulos/OtrosModel.php';
     require '../model/ConectarDB.php';
 
     header('Access-Control-Allow-Origin: *');
@@ -23,84 +19,24 @@
         }       
     } 
 
-    function resumen_medico(){ 
-        $paciente = new PacienteModel;
-        $cita     = new CitaModel;
-        $ejercicio = new EjercicioModel;
-        $medico = new MedicoModel;
-        $empresa = new EmpresaModel;
-        $rol = $_SESSION["gv_rol_user"]; // 3: Medico / 4: Paciente / 1: Administrador
-        if($rol == 3){
-            $arr_ejer = $ejercicio->medico_cant();
-            $EjerciciosActivos     = isset($arr_ejer['AC'])? $arr_ejer['AC']: 0;
-            $EjerciciosIncumplidos = isset($arr_ejer['IN'])? $arr_ejer['IN']: 0;
-            $EjerciciosRealizados  = isset($arr_ejer['OK'])? $arr_ejer['OK']: 0;
-
-            $total = $EjerciciosActivos + $EjerciciosIncumplidos + $EjerciciosRealizados;
-
-            $resp = array(
-                "totalPacientes"        => $paciente->medico_cant( "ALL"),
-                "pacientesActivos"      => $paciente->medico_cant( "AC"),
-                "pacientesInactivos"    => $paciente->medico_cant("IN"),
-                "citasActivas"          => $cita->medico_cant( 'AC' ),
-                "totalEjercicios"       => $total,
-                "ejerciciosActivos"     => $EjerciciosActivos,
-                "ejerciciosIncumplidos" => $EjerciciosIncumplidos,
-                "ejerciciosRealizados"  => $EjerciciosRealizados            
-            );   
-
-        }else if( $rol == 4){
-            $cita_activa        = $cita->paciente_cant( "AC" );
-            $cita_inactiva      = $cita->paciente_cant( "IN" );
-            $cita_realizada     = $cita->paciente_cant( "RE" );
-            $cita_total         = $cita_activa + $cita_inactiva + $cita_realizada;
-
-            $arr_ejer = $ejercicio->paciente_cant();
-            $EjerciciosActivos     = isset($arr_ejer['AC'])? $arr_ejer['AC']: 0;
-            $EjerciciosIncumplidos = isset($arr_ejer['IN'])? $arr_ejer['IN']: 0;
-            $EjerciciosRealizados  = isset($arr_ejer['OK'])? $arr_ejer['OK']: 0;
-
-            $total = $EjerciciosActivos + $EjerciciosIncumplidos + $EjerciciosRealizados;
-
-            $resp = array(
-                "citasActivas"          => $cita_activa,
-                "citasRealizadas"       => $cita_realizada,
-                "citasInactivas"        => $cita_inactiva,                
-                "totalCitas"            => $cita_total,
-
-                "totalEjercicios"       => $total,
-                "ejerciciosActivos"     => $EjerciciosActivos,
-                "ejerciciosIncumplidos" => $EjerciciosIncumplidos,
-                "ejerciciosRealizados"  => $EjerciciosRealizados         
-            );  
-
-        }else if( $rol == 1){
-            $cita_total        = $cita->admin_cant( "ALL" );
-            $cita_activa       = $cita->admin_cant( "AC" );
-            $paciente_total    = $paciente->admin_cant( "ALL" );
-            $paciente_activo   = $paciente->admin_cant( "AC" );
-            $empresa_total     = $empresa->admin_cant("ALL");
-            $medico_total    = $medico->admin_cant( "ALL" );
-            $medico_activo   = $medico->admin_cant( "AC" );
-            $ejercicio_total = $ejercicio->admin_cant();
-
-            $resp = array(
-                "citasActivas"          => $cita_activa,
-                "pacienteActivos"       => $paciente_activo,
-                "totalCitas"            => $cita_total,                
-                "totalPacientes"        => $paciente_total,
-
-                "totalMedicos"       => $medico_total,
-                "medicoActivos"     => $medico_activo,
-                "ejerciciosAsignados" => $ejercicio_total,
-                "empresasRegistradas"  => $empresa_total      
-            );  
-
+    function resumen(){ 
+        $BD = new OtrosModel;
+        $resp = array();
+        $rol = $_SESSION["gv_rol"]; // 3: Medico / 4: Paciente / 1: Administrador
+        switch ($rol) {
+            case '1':
+                $resp = array(
+                    "item1"  => $BD->Cantidad_Registros('empresas'),
+                    "item2"  => $BD->Cantidad_Registros('usuarios', [ 'roluser' => '4' ] ),
+                    "item3"  => $BD->Cantidad_Registros('usuarios', [ 'roluser' => '4', 'state' => 'AC' ] ),           
+                    "item4"  => $BD->Sumar_Campo('history_exercises h', 'h.session'),
+                    "item5"  => $BD->Cantidad_Registros('usuarios', [ 'roluser' => '3' ] ),
+                    "item6"  => $BD->Cantidad_Registros('usuarios', [ 'roluser' => '3', 'state' => 'AC' ] ),    
+                    "item7"  => $BD->Cantidad_Registros('citas'),
+                    "item8"  => $BD->Cantidad_Registros('citas', [ 'state' => 'AC' ] )  
+                );  
+            break;
         }
-        
         return $resp;
- 
-            
-        // echo json_encode($resp);
     }  
 ?>

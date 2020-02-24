@@ -23,7 +23,7 @@
                         <div class="col-9 pl-0 pr-2">
                             <div class="text-right">
                                 <p class="titulos-cajas">Empresas Registradas</p>
-                                <p id="empresasRegistradas" class="valores-cajas">0</p>
+                                <p id="item1" class="valores-cajas">0</p>
                             </div>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                         <div class="col-9 pl-0 pr-2">
                             <div class="text-right">
                                 <p class="titulos-cajas">Pacientes Registrados</p>
-                                <p id="totalPacientes" class="valores-cajas">0</p>
+                                <p id="item2" class="valores-cajas">0</p>
                             </div>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                         <div class="col-9 pl-0 pr-2">
                             <div class="text-right">
                                 <p class="titulos-cajas">Pacientes Activos</p>
-                                <p id="pacienteActivos" class="valores-cajas">0</p>
+                                <p id="item3" class="valores-cajas">0</p>
                             </div>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                         <div class="col-9 pl-0 pr-2">
                             <div class="text-right">
                                 <p class="titulos-cajas">Ejercicios Asignados</p>
-                                <p id="ejerciciosAsignados" class="valores-cajas">0</p>
+                                <p id="item4" class="valores-cajas">0</p>
                             </div>
                         </div>
                     </div>
@@ -109,7 +109,7 @@
                         <div class="col-9 pl-0 pr-2">
                             <div class="text-right">
                                 <p class="titulos-cajas">Medicos Registrados</p>
-                                <p id="totalMedicos" class="valores-cajas">0</p>
+                                <p id="item5" class="valores-cajas">0</p>
                             </div>
                         </div>
                     </div>
@@ -131,7 +131,7 @@
                         <div class="col-9 pl-0 pr-2">
                             <div class="text-right">
                                 <p class="titulos-cajas">Medicos Activos</p>
-                                <p id="medicoActivos" class="valores-cajas">0</p>
+                                <p id="item6" class="valores-cajas">0</p>
                             </div>
                         </div>
                     </div>
@@ -153,7 +153,7 @@
                         <div class="col-9 pl-0 pr-2">
                             <div class="text-right">
                                 <p class="titulos-cajas">Citas Registradas</p>
-                                <p id="totalCitas" class="valores-cajas">0</p>
+                                <p id="item7" class="valores-cajas">0</p>
                             </div>
                         </div>
                     </div>
@@ -175,7 +175,7 @@
                         <div class="col-9 pl-0 pr-2">
                             <div class="text-right">
                                 <p class="titulos-cajas">Citas Activas</p>
-                                <p id="citasActivas" class="valores-cajas">0</p>
+                                <p id="item8" class="valores-cajas">0</p>
                             </div>
                         </div>
                     </div>
@@ -214,37 +214,25 @@
     <script>
         cargando();
         $("#li-resumen").addClass("active");   
-        
-        var url = '/apps/controller/resumen';
-        var data = {funcion: "resumen_medico", parametros: ""};
+        cargar();
 
-        fetch(url, {
-            method: 'POST', // or 'PUT'
-            body: JSON.stringify(data), // data can be `string` or {object}!
-            headers:{
-                'Content-Type': 'application/json'
-            }
-        }).then(res => res.json())
-        .catch(error =>  {
-            console.log(error);
-            swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
-        })
-        .then(resp => {
-            $("#citasActivas").text(resp["citasActivas"] ? resp["citasActivas"] : 0);
-            $("#pacienteActivos").text(resp["pacienteActivos"] ? resp["pacienteActivos"] : 0);
-            $("#totalCitas").text(resp["totalCitas"] ? resp["totalCitas"] : 0);
-            $("#totalPacientes").text(resp["totalPacientes"] ? resp["totalPacientes"] : 0);
-
-            $("#totalMedicos").text(resp["totalMedicos"] ? resp["totalMedicos"] : 0);
-            $("#medicoActivos").text(resp["medicoActivos"] ? resp["medicoActivos"] : 0);
-            $("#ejerciciosAsignados").text(resp["ejerciciosAsignados"] ? resp["ejerciciosAsignados"] : 0);
-            $("#empresasRegistradas").text(resp["empresasRegistradas"] ? resp["empresasRegistradas"] : 0);
-            cargarGraficos(resp);
-
-            setTimeout(() => {
-                swal.close();
-            }, 200);    
-        });    
+        function cargar(){
+            var url = '/apps/controller/resumen';
+            var data = { funcion : "resumen", parametros : { } };
+            var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
+            fetch(url, miInit).then(res => res.json()).catch(error =>  {
+                console.log(error);
+                swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
+            }).then(resp => {
+                $("p.valores-cajas").each(function(){
+                    var id = $(this).attr("id");
+                    $(this).text( resp[id] ?? 0 );
+                });
+                cargarGraficos(resp);
+                setTimeout(() => {  swal.close(); }, 200);    
+            });   
+        }
+ 
 
         function cargando(){
             swal('Cargando, espere un momento por favor ... ',{
@@ -296,7 +284,7 @@
             labels: ['Pacientes Registrados', 'Pacientes Activos', 'Citas Registradas', 'Citas Activas'],
             series: [
                 {
-                data: [ resp["totalPacientes"], resp["pacienteActivos"], resp["totalCitas"], resp["citasActivas"]]
+                data: [ resp["item2"], resp["item3"], resp["item7"], resp["item8"]]
                 }
             ]
             };
@@ -309,7 +297,7 @@
                 labels: ['Empresas Registradas', 'Medicos Registrados', 'Medicos Activos', 'Ejercicios Asignados'],
                 series: [
                     {
-                    data: [ resp["empresasRegistradas"], resp["totalMedicos"], resp["medicoActivos"], resp["ejerciciosAsignados"] ]
+                    data: [ resp["item1"], resp["item5"], resp["item6"], resp["item4"] ]
                     }
                 ]
             };

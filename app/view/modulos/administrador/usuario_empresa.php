@@ -1,7 +1,6 @@
-<?php include "../../../../../config/config.php"; ?>
-<?php include "../../../../../config/seguridad.php"; ?>
-<?php include "../../../layouts/administrador/inicio.php";?>
-<!-- head -->
+<?php include "../../../../config/config.php"; ?>
+<?php include "../../../../config/seguridad.php"; ?>
+<?php include "../../layouts/administrador/inicio.php";?>
 <style>
 #tbl-pacientes thead th{
 color:#9c27b0;
@@ -227,9 +226,8 @@ ul#tabs-ver .nav-item .nav-link{
 }
 
 </style>
-
 <!-- / head -->
-<?php include "../../../layouts/administrador/body.php";?>
+<?php include "../../layouts/administrador/body.php";?>
 <!-- Contenedor de la pagina -->
 <div class="row px-4" id="contenedor_principal">
     <div class="col-12 card px-0">
@@ -239,17 +237,16 @@ ul#tabs-ver .nav-item .nav-link{
         <div class="card-body">
                 <!-- link de los tabs -->
                 <div class="row justify-content-end mb-3">
-                    <a href="/apps/rol-administrador/usuarios/nuevo" class="btn bg-verde text-light font-weight-bold float-right mx-1"><span class="fas fa-user-check mr-2"></span>Nuevo Usuario</a>  
+                    <a href="/apps/rol-administrador/usuarios/nuevo" class="btn bg-verde text-light font-weight-bold float-right mx-1"><span class="fas fa-user-check mr-2"></span>Nueva Asignación</a>  
                 </div>
                 <!-- contenedor de los tabs -->
                 <table id="tbl-pacientes" class="table table-sm table-striped table-bordered">
                     <thead class="text-primary">
                         <th class="d-none d-sm-none d-md-table-cell">Identificacion</th>
-                        <th>Nombres</th>
-                        <th>Apellidos</th>
-                        <th class="d-none d-sm-none d-md-table-cell">Usuario</th>
-                        <th class="d-none d-sm-none d-md-table-cell">Email</th>
+                        <th>Usuario</th>
+                        <th class="d-none d-sm-none d-md-table-cell">Nombre de usuario</th>
                         <th class="d-none d-sm-none d-md-table-cell">Rol</th>
+                        <th class="d-none d-sm-none d-md-table-cell">Empresa</th>
                         <th></th>
                     </thead>
                     <tbody id="tbody_historias">
@@ -275,10 +272,10 @@ ul#tabs-ver .nav-item .nav-link{
     </div>
 </div>
 <!-- / Contenedor de la pagina -->
-<?php include "../../../layouts/administrador/footer.php";?>
+<?php include "../../layouts/administrador/footer.php";?>
 <!-- scripts -->
 <script>
-    $("#li-usuarios").addClass("active");
+$("#li-asignar").addClass("active");
     listar(1);
     function listar(pagina){
         if(pagina == 1){
@@ -288,7 +285,7 @@ ul#tabs-ver .nav-item .nav-link{
         }
         var url = '/apps/controller/usuario';
         var parametros = { "pagina" : pagina };
-        var data = { funcion : "listar", parametros : parametros };
+        var data = { funcion : "listar_usuario_empresa", parametros : parametros };
         var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
         cargando();
         fetch(url, miInit).then(res => res.json()).catch(error =>  {
@@ -315,13 +312,14 @@ ul#tabs-ver .nav-item .nav-link{
             for(var i=0; i < resp.usuarios.length; i++){
                 html+="<tr>";
                 html+="<td>("+resp.usuarios[i].tipodoc+" ) "+resp.usuarios[i].numdoc+"</td>";
-                html+="<td>"+( resp.usuarios[i].nombre1 ?? '')+" "+(resp.usuarios[i].nombre2 ?? '')+"</td>";
-                html+="<td>"+( resp.usuarios[i].apellido1 ?? '' )+" "+( resp.usuarios[i].apellido2 ?? '' )+"</td>";
-                html+="<td>"+( resp.usuarios[i].usuario ?? '' )+"</td>";
-                html+="<td>"+( resp.usuarios[i].email ?? '' )+"</td>";
-                html+="<td>"+( resp.usuarios[i].roluser ? rol_user(resp.usuarios[i].roluser) : '' )+"</td>";
                 html+="<td>";
-                    html+="<a disabled href='/apps/rol-administrador/usuarios/ver/"+resp.usuarios[i].id+"' class='cl-azul mx-1'><i class='fas fa-eye'></i></a>";
+                    html+=( resp.usuarios[i].nombre1 ?? ''  )+" "+(resp.usuarios[i].nombre2 ?? '');
+                    html+=" "+( resp.usuarios[i].apellido1 ?? '')+" "+(resp.usuarios[i].apellido2 ?? '');
+                html+="</td>";
+                html+="<td>"+( resp.usuarios[i].usuario ?? '' )+"</td>";
+                html+="<td>"+( resp.usuarios[i].roluser ? rol_user(resp.usuarios[i].roluser) : '' )+"</td>";
+                html+="<td>"+( resp.usuarios[i].empresa ?? '' )+"</td>";                
+                html+="<td>";
                     html+="<a disabled href='/apps/rol-administrador/usuarios/editar/"+resp.usuarios[i].id+"' class='cl-amarillo mx-1 mr-2'><i class='fas fa-edit'></i></a>  ";
                 html+="</td>";
                 html+="</tr>";
@@ -448,7 +446,6 @@ ul#tabs-ver .nav-item .nav-link{
             break;
         }
     }
-
-</script>
+    </script>
 <!-- / scripts -->
-<?php include "../../../layouts/administrador/fin.php";?>
+<?php include "../../layouts/administrador/fin.php";?>

@@ -318,11 +318,11 @@ ul#tabs-ver .nav-item .nav-link{
                 html+="<td>"+(resp.empresas[i].nombre ? resp.empresas[i].nombre : '')+"</td>";
                 html+="<td>"+(resp.empresas[i].direccion ? resp.empresas[i].direccion : '')+"</td>";
                 html+="<td>"+(resp.empresas[i].email ? resp.empresas[i].email : '')+"</td>";
-                html+="<td id='td_est_"+resp.empresas[i].id+"'>"+(resp.empresas[i].estado ? resp.empresas[i].estado : '')+"</td>";
+                html+="<td id='td_est_"+resp.empresas[i].id+"'>"+(resp.empresas[i].state ? resp.empresas[i].state : '')+"</td>";
                 html+="<td>";
                     html+="<a disabled href='/apps/rol-administrador/empresas/ver/"+resp.empresas[i].id+"' class='cl-azul mx-1'><i class='fas fa-eye'></i></a>";
                     html+="<a disabled href='/apps/rol-administrador/empresas/editar/"+resp.empresas[i].id+"' class='cl-amarillo mx-1 mr-2'><i class='fas fa-edit'></i></a>  ";
-                    html+=`<a id='a_est_`+resp.empresas[i].id+`' disabled href="javascript:cambiar_estado(`+resp.empresas[i].id+`, '`+resp.empresas[i].estado+`')" class="cl-`+(resp.empresas[i].estado == 'AC' ? 'rojo' : 'verde')+` mx-1"><i id="i_est_`+resp.empresas[i].id+`" class="`+(resp.empresas[i].estado == 'AC' ? 'fas fa-minus-circle' : '	fas fa-power-off')+`"></i></a>`;
+                    html+=`<a id='a_est_`+resp.empresas[i].id+`' disabled href="javascript:cambiar_estado(`+resp.empresas[i].id+`, '`+resp.empresas[i].state+`')" class="cl-`+(resp.empresas[i].state == 'AC' ? 'rojo' : 'verde')+` mx-1"><i id="i_est_`+resp.empresas[i].id+`" class="`+(resp.empresas[i].state == 'AC' ? 'fas fa-minus-circle' : '	fas fa-power-off')+`"></i></a>`;
                 html+="</td>";
                 html+="</tr>";
             }

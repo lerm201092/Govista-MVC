@@ -219,7 +219,7 @@
                             </div>  
                         </div>
                     </div>
-                    <input type="hidden" name="estado" value="AC" />
+                    <input type="hidden" name="state" value="AC" />
                     <input type="hidden" name="addcoduser" value="<?=(USERNAME)?>" />
 
                     <div class="row pt-4">
@@ -274,8 +274,7 @@
         var sw = 0;
         var dpto = $("#"+cb_dpto).val();
         var parametros = { "dpto" : dpto };
-
-        var url = '/apps/controller/paciente';
+        var url = '/apps/controller/empresa';
         var data = { funcion: "cargar_munic", parametros: parametros };
         var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
         fetch(url, miInit).then(res => res.json()).catch(error =>  {
@@ -316,12 +315,48 @@
             console.log(error);
             swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
         }).then(resp => {
-            swal('¡Registro guardado satisfactoriamente!', { closeOnClickOutside: false, buttons: false, icon : "success"}); 
-            setTimeout(() => {
-                location.href = "/apps/rol-administrador/empresas/listado";
-            }, 3000);
+            if(resp == "OK"){
+                swal('¡Registro guardado satisfactoriamente!', { closeOnClickOutside: false, buttons: false, icon : "success"});
+                setTimeout(() => { location.href = "/apps/rol-administrador/empresas/listado";  }, 3000);
+            }else{
+                const wrapper = document.createElement('p');
+                wrapper.innerHTML = Exception(resp);
+                swal({
+                    title: "GoVista",
+                    content: wrapper, 
+                    icon: "warning"
+                });
+            }
+
         });           
     }
+
+    function Exception(arr){
+        if( arr["errorInfo"] ){
+            if( arr["errorInfo"][0] == '23000' ){
+                console.log();
+                var array = TextoComillas(arr["errorInfo"][2]);
+                var campo = array[1], valor = array[0];
+                var mensaje = "<p>¡Advertencia, El campo <b><i>'"+campo+"'</i></b> con valor <b><i>'"+valor+"'</i></b> ya se encuentra registrado.!</p>";
+                return mensaje;
+            }
+        }
+        return "¡Se ha generado un error en el servidor, por favor contacte al administrador!";
+    }
+
+    function TextoComillas(texto) {
+        const regex = /[^'"\\]*(?:\\.[^'"\\]*)*(["'])([^"'\\]*(?:(?:(?!\1)["']|\\.)[^"'\\]*)*)\1/gy;
+        var   grupo,
+            resultado = [];
+        
+        while ((grupo = regex.exec(texto)) !== null) {
+            //el grupo 1 contiene las comillas utilizadas
+            //el grupo 2 es el texto dentro de éstas
+            resultado.push(grupo[2]);
+        }
+        return resultado;
+    }
+
 
 </script>
 <!-- / scripts -->

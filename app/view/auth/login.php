@@ -39,26 +39,26 @@
             <div class="col-lg-3 bg-white" style="position: absolute; height: 100%;">
                 <p style="font-size: 30px; color: #d81b5c; font-family: calibri; margin-top: 20px; margin-bottom: 20px;" class="col-12 text-center">INICIAR SESIÓN</p>
 
-                <form id="form-login" class="row" onsubmit="return false">
+                <form id="form-login" action="javascript:void(0)" onsubmit="autenticar()">
                     <div class="col-12">
                         <div class="form-group py-2 px-3" >
                             <label class="mb-0" for="username" style="font-style: italic">Usuario</label>
-                            <input type="text" id="username" name="username" style="font-style: italic" class="form-control  form-control-sm" placeholder="Ingrese su usuario">
+                            <input required type="text" id="usuario" name="usuario" style="font-style: italic" class="form-control  form-control-sm" placeholder="Ingrese su usuario">
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-group py-2 px-3">
                             <label class="mb-0" for="username" style="font-style: italic">Contraseña</label>
-                            <input type="password" id="password" name="password" style="font-style: italic" class="form-control  form-control-sm" placeholder="Ingrese su contraseña">
+                            <input required type="password" id="password" name="password" style="font-style: italic" class="form-control  form-control-sm" placeholder="Ingrese su contraseña">
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="form-group py-2 px-3">
                             <label class="mb-0" for="username" style="font-style: italic">Empresa</label>
-                            <select name="companies" style="font-style: italic" class="form-control form-control-sm" id="companies" required>
+                            <select name="id_empresa" style="font-style: italic" class="form-control form-control-sm" id="id_empresa" required>
                                 <option value="" >- Escoja una opción -</option>
                             </select>
-                            <span id="car_companies" class="d-none text-primary" style="font-size:11px;">Cargando Empresas . . .</span>
+                            <span id="id_empresa" class="d-none text-primary" style="font-size:11px;">Cargando Empresas . . .</span>
                         </div>
                     </div>
                     <div class="col-12 mt-4  mb-2">
@@ -88,52 +88,9 @@
                         </div>    
                     </div>
 
+                    <input type="hidden" name="empresa" value="" />
                 </form>
             </div>
-        </div>
-        <!-- <div class="container">
-            <div class="row justify-content-center py-4">
-                <div class="col-md-6">
-                    <div class="card ">
-                        <div class="card-header">
-                            Acceso al sistema
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-12 text-center">
-                                    <img src="/apps/img/logo.png" alt="">
-                                </div>
-                            </div>
-                            <form id="form-login" onsubmit="return false">
-                                <div class="form-group mb-3">
-                                    <label for="username" class="mb-1">Usuario</label>
-                                    <input type="text" id="username" name="username" class="form-control form-control-sm" required/>
-                                    <small id="err_username" class="d-none text-danger">Debe ingresar un usuario.</small>
-                                </div>
-                                <div class="form-group mb-2 has-danger">
-                                    <label for="password" class="mb-1">Contraseña</label>
-                                    <input type="password" id="password" name="password" class="form-control form-control-sm" required />
-                                    <small id="err_password" class="d-none text-danger">Debe ingresar una contraseña.</small>
-                                </div>
-                                <div class="form-group mb-4">
-                                    <label for="password" class="mb-1">Empresa</label>
-                                    <select name="companies" class="form-control form-control-sm" id="companies" required>
-                                        <option value="">- Escoja una opción -</option>
-                                    </select>
-                                    <small id="err_companies" class="d-none text-danger">Debe seleccionar una empresa.</small>
-                                    <span id="car_companies" class="d-none text-primary" style="font-size:11px;">Cargando Empresas . . .</span>
-                                </div>
-
-                                <div class="form-group mt-4">
-                                    <button type="submit" class="btn bg-azul text-light" id="btn-ingresar">Ingresar</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>            
-            </div>
-        </div> -->
-
 
         <script src="/apps/node/jquery/dist/jquery.min.js"></script>
         <script src="/apps/node/bootstrap/dist/js/bootstrap.min.js"></script>
@@ -142,35 +99,64 @@
 
         <script>
             $(document).ready(function(){
-                $('#btn-ingresar').on('click', function(e) {
-                    e.preventDefault();                 
-                    autenticar();
-                }); 
-
                 $("#form-login :input").on("keyup", function(){
                     $("small").addClass("d-none");
                 });
 
-                // $("#username").focusin(function(){
-                //     $(this).attr("placeholder", "");
-                //     $("label[for=username]").removeClass("d-none")
-                // }).focusout(function(){
-                //     if($(this).val() == ""){
-                //         $(this).attr("placeholder", "Ingrese su usuario");
-                //         $("label[for=username]").addClass("d-none");
-                //     } 
-                // });
-
-                $("#username").blur(function(){
+                $("#usuario").blur(function(){
                     if($(this).val().trim()!=""){
-                        cargarEmpresas();
+                        usuario_empresa();
                     }                    
                 });
 
-                $("#companies").on("change", function(){
+                $("select[id=id_empresa]").on("change", function(){
+                    var empresa = $(this).children("option:selected").text();
+                    $("input[name=empresa]").val( empresa );
                     $("#err_companies").addClass("d-none");
                 });
             });
+
+            function autenticar(){
+                var parametros = $("#form-login").serializeArray();
+                var url = '/apps/controller/usuario';
+                var data = { funcion : "autenticar",  parametros : { parametros }  };
+                var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
+                fetch(url, miInit).then(res => res.json()).catch(error =>  {
+                    console.log(error);
+                    swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
+                }).then(resp => {
+                    if(resp["OK"]){ 
+                        // console.log(resp["homepage"]);
+                        location.href = resp["homepage"];
+                    }else{
+                        setTimeout(() => { swal("GoVista", "¡Usuario y/o contraseña incorrectos!", "error");  }, 200 );   
+                    }                                                       
+                });
+            }
+
+            function usuario_empresa(){
+                $("span[id=id_empresa]").removeClass("d-none");
+                var usuario =  $("#usuario").val();                
+                if(usuario.trim() != ""){
+                    var parametros = { "usuario" : usuario }
+                    var url = '/apps/controller/usuario';
+                    var data = { funcion : "usuario_empresa", parametros : { 'usuario' : usuario } };
+                    var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
+                    fetch(url, miInit).then(res => res.json()).catch(error =>  {
+                        console.log(error);
+                        swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
+                    }).then(resp => {
+                        var html = "<option value=''>- Escoja una opción -</option>";
+                        for(var i=0; i < resp.length; i++){
+                            html += "<option value = '"+resp[i].id_empresa+"'>"+resp[i].empresa+"</option>";
+                        }
+                        $("select[id=id_empresa]").html(html);
+                        setTimeout(() => {
+                            $("span[id=id_empresa]").addClass("d-none");
+                        }, 300);
+                    });
+                }
+            }
 
             function cargando(){
                 swal('Cargando, espere un momento por favor ... ',{
@@ -185,92 +171,6 @@
                         },
                     },
                 });
-            }
-
-            function autenticar(){
-                var form = $("#form-login :input");
-                if(validarCampos(form)){
-                    cargando();
-                    var  parametros = {
-                        "username" : $("input[name=username]").val(),
-                        "password" : $("input[name=password]").val(),
-                        "companies" : $("select[name=companies] option:selected").val(),
-                        "name_companies" : $("select[name=companies] option:selected").text()
-                    };   
-                    console.log(parametros);                 
-                    var url = '/apps/controller/usuario';
-                    var data = {funcion: "autenticar", parametros: parametros};
-
-                    fetch(url, {
-                        method: 'POST', // or 'PUT'
-                        body: JSON.stringify(data), // data can be `string` or {object}!
-                        headers:{
-                            'Content-Type': 'application/json'
-                        }
-                    }).then(res => res.json())
-                    .catch(error => {
-                        console.log(error);
-                        swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
-                    })
-                    .then(resp => {
-                        if(resp["OK"]){ 
-                            location.href = resp["homepage"];
-                        }else{
-                            setTimeout(() => {
-                                swal("GoVista", "¡Usuario y/o contraseña incorrectos!", "error");
-                            }, 200);                               
-                        }
-                    });
-                }else{
-                    $("#div-alerta").removeClass("d-none");
-                }
-            }
-
-            function validarCampos(form){
-                var sw = true;
-                form.each(function(){
-                    if($(this).attr("required")){
-                        var val = $(this).val(); 
-                       if( val === "" ){
-                            var id=$(this).attr("id");
-                            $("#err_"+id).removeClass("d-none");
-                            sw = false;
-                       }
-                    }
-                });
-                return sw;
-            }
-
-            function cargarEmpresas(){
-                $("#car_companies").removeClass("d-none");
-                var usuario = $("#username").val();
-                var parametros = "username="+usuario;
-                if(usuario.trim() != ""){
-                    var url = '/apps/controller/usuario';
-                    var data = {funcion: "userEmpresa", parametros: parametros};
-
-                    fetch(url, {
-                        method: 'POST', // or 'PUT'
-                        body: JSON.stringify(data), // data can be `string` or {object}!
-                        headers:{
-                            'Content-Type': 'application/json'
-                        }
-                    }).then(res => res.json())
-                    .catch(error =>  {
-                        console.log(error);
-                        swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
-                    })
-                    .then(resp => {
-                        var html = "<option value=''>- Escoja una opción -</option>";
-                        for(var i=0; i < resp.length; i++){
-                            html += "<option value = '"+resp[i].id_empresa+"'>"+resp[i].nombre+"</option>";
-                        }
-                        $("#companies").html(html);
-                        setTimeout(() => {
-                            $("#car_companies").addClass("d-none");
-                        }, 300);
-                    });
-                }
             }
         </script>
 

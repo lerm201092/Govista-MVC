@@ -83,6 +83,14 @@
                 </p>
                 </a>
             </li> 
+            <li class="nav-item" id="li-asignar">
+                <a href="/apps/rol-administrador/usuario_empresa/asignar" class="nav-link">
+                <span class="nav-icon fas fa-users-cog"></span>
+                <p>
+                    Asignar Empresa
+                </p>
+                </a>
+            </li> 
             <li class="nav-item" id="li-historias">
             <a href="<?=(CERRAR_SESION)?>" class="nav-link">
                 <span class="nav-icon fas fa-sign-out-alt"></span>

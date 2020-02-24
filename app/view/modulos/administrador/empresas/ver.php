@@ -138,6 +138,10 @@
 				<div class="col-md-4 p-0"><p class="p-0 m-0 py-2 font-weight-bold cl-morado-light">Ciudad</p></div>
 				<div class="col-md-8 p-0"><p class="p-0 m-0 py-2" id="ciudad" tipo="campo_bd"></p></div>
 			</div>
+            <div class="row border border-left-0 border-right-0 border-top-0 p-0">
+				<div class="col-md-4 p-0"><p class="p-0 m-0 py-2 font-weight-bold cl-morado-light">Contacto</p></div>
+				<div class="col-md-8 p-0"><p class="p-0 m-0 py-2" id="contacto" tipo="campo_bd"></p></div>
+			</div>
 			<div class="row border border-left-0 border-right-0 border-top-0 p-0">
 				<div class="col-md-4 p-0"><p class="p-0 m-0 py-2 font-weight-bold cl-morado-light">Email</p></div>
 				<div class="col-md-8 p-0"><p class="p-0 m-0 py-2" id="email" tipo="campo_bd"></p></div>

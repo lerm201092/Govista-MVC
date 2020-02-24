@@ -138,23 +138,49 @@
                 <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Identificación:</span></div>
                 <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="tipodoc"></span>&nbsp;-&nbsp;<span tipo="campo_bd" id="numdoc"></span></div>
                 <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Usuario:</span></div>
-                <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="username"></span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="usuario"></span></div>
                 <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Nombre:</span></div>
-                <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="name1"></span>&nbsp;<span tipo="campo_bd" id="name2"></span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="nombre1"></span>&nbsp;<span tipo="campo_bd" id="nombre2"></span></div>
                 <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Apellido:</span></div>
-                <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="surname1"></span>&nbsp;<span tipo="campo_bd" id="surname2"></span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="apellido1"></span>&nbsp;<span tipo="campo_bd" id="apellido2"></span></div>
                 <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Email:</span></div>
                 <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="email"></span></div>
                 <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Teléfono:</span></div>
                 <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="telefono"></span></div>
                 <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Dirección:</span></div>
-                <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="address"></span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="direccion"></span></div>
                 <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Ciudad:</span></div>
                 <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="muni"></span>&nbsp;-&nbsp;<span tipo="campo_bd" id="dpto"></span></div>
                 <div class="col-6 col-lg-3 py-2 div_celda "><sapn class="titulo">Rol:</sapn></div>
                 <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="descrol"></span></div>
                 <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Estado:</span></div>
                 <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="estado_f"></span></div>
+                <div id="paciente" class="d-none" style="width:100%">
+                    <div class="row">
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Eps:</span></div>
+                        <div class="col-6 col-lg-9 py-2 div_celda "><span tipo="campo_bd" id="eps"></span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Carnet:</span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="pac_carnet"></span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Nombre contacto:</span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="pac_contact_name"></span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Apellido contacto:</span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="pac_contact_surname"></span></div>    
+
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Teléfono contacto:</span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="pac_contact_phone"></span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Email contacto:</span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="pac_contact_email"></span></div>                     
+                    </div>
+                </div>
+                <div id="medico" class="d-none" style="width:100%">
+                    <div class="row">
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Especialidad:</span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="med_especialidad"></span></div>                  
+                    </div>
+                </div>
+
+
+
             
             </div>
 
@@ -180,7 +206,11 @@
         console.log(error);
         swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
     }).then(resp => {
-        console.log(resp);
+        if(resp.roluser == 4){
+            $("#paciente").removeClass("d-none");
+        }else if(resp.roluser == 3){
+            $("#medico").removeClass("d-none");
+        }
         $("span[tipo=campo_bd]").each(function(){
             var name = $(this).attr("id"), valor = resp[name];
             $(this).text(valor);

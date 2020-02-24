@@ -16,12 +16,13 @@
 
     // Variables de sesion
     if($_SESSION){
-        define('ID_USER',       $_SESSION["gv_id_user"]);
-        define('NOMBRE_USER',   $_SESSION["gv_nombre_user"]);
-        define('USERNAME',      $_SESSION["gv_username"]);
-        define('ID_EMPRESA',    $_SESSION["gv_empresa"]);
-        define('ROL_USER',      $_SESSION["gv_rol_user"]);
-        define('PAGO_USER',     $_SESSION["gv_pago_user"]);
+        define('ID_USER',       $_SESSION["gv_iduser"]);
+        define('NOMBRE_USER',   $_SESSION["gv_nombre"]);
+        define('USERNAME',      $_SESSION["gv_usuario"]);
+        define('ID_EMPRESA',    $_SESSION["gv_idempresa"]);
+        define('EMPRESA',       $_SESSION["gv_empresa"]);
+        define('ROL_USER',      $_SESSION["gv_rol"]);
+        define('PAGO_USER',     $_SESSION["gv_pago"]);
     }
 
 ?>

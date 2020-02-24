@@ -44,8 +44,11 @@ RewriteRule ^apps/rol-administrador/empresas/nuevo$   app/view/modulos/administr
 
 RewriteRule ^apps/rol-administrador/usuarios/listado$   app/view/modulos/administrador/usuarios/listado.php
 RewriteRule ^apps/rol-administrador/usuarios/ver/([0-9]+)$    app/view/modulos/administrador/usuarios/ver.php?id=$1
+RewriteRule ^apps/rol-administrador/usuarios/nuevo$   app/view/modulos/administrador/usuarios/crear.php
+RewriteRule ^apps/rol-administrador/usuarios/editar/([0-9]+)$    app/view/modulos/administrador/usuarios/editar.php?id=$1
 
 
+RewriteRule ^apps/rol-administrador/usuario_empresa/asignar$      app/view/modulos/administrador/usuario_empresa.php
 
 #sources
 RewriteRule ^apps/img/(.*) sources/img//$1
@@ -57,12 +60,12 @@ RewriteRule ^apps/juegos/(.*) juegos//$1
 RewriteRule ^apps/node/(.*) node_modules//$1
 
 #controller
-RewriteRule ^apps/controller/usuario$ app/controller/UsuarioController.php
+RewriteRule ^apps/controller/usuario$ app/controller/UsuariosController.php
 RewriteRule ^apps/controller/ejercicio$ app/controller/EjercicioController.php
 RewriteRule ^apps/controller/resumen$ app/controller/resumenController.php
 RewriteRule ^apps/controller/paciente$ app/controller/PacienteController.php
 RewriteRule ^apps/controller/citas$ app/controller/CitaController.php
-RewriteRule ^apps/controller/empresa$ app/controller/EmpresaController.php
+RewriteRule ^apps/controller/empresa$ app/controller/EmpresasController.php
 RewriteRule ^apps/controller/historia$ app/controller/HistoriaClinicaController.php
 
 </ifmodule> 
