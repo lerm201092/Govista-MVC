@@ -232,7 +232,7 @@ ul#tabs-ver .nav-item .nav-link{
 <div class="row px-4" id="contenedor_principal">
     <div class="col-12 card px-0">
         <div class="card-header mx-0">
-            <h5 class="mb-0">Listado De usuarios registradas</h5>
+            <h5 class="mb-0">Empresas asignadas a usuarios</h5>
         </div>
         <div class="card-body">
                 <!-- link de los tabs -->

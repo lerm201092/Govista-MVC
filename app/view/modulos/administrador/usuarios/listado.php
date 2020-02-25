@@ -219,6 +219,12 @@ ul#tabs-ver .nav-item .nav-link{
     font-family: calibri;
 }
 
+.alert-danger-lr{  
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
 @media (max-width: 600px) {
     #contenedor_principal{
         padding: 5px 5px!important;
@@ -274,6 +280,68 @@ ul#tabs-ver .nav-item .nav-link{
         </div>
     </div>
 </div>
+
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="md_asignar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sp_name">Cambio de contraseña</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <div class="row">
+          <div class="col-12 m-0 p-0 mb-3">
+                <p class="mb-0 cl-rojo" style="font-weight: 600">Usuario: <span class="text-dark " id="sp_nombre"></span></p>
+                <p class="mb-0 cl-rojo" style="font-weight: 600">Nombre de usuario: <span class="text-dark " id="sp_usuario"></span></p>
+          </div>
+      </div>
+        
+        <input type="hidden" id="id_pass">
+
+         <div class="row">
+            <div class="col-12 m-0 p-0">
+                <div class="form-group">
+                     <label for="" style="font-weight: 600">Contraseña:</label>   
+                     <input style="font-size: 12px" id="pass1" type="password" class="form-control form-control-sm">
+                </div>
+            </div>
+         </div>
+
+         <div class="row">
+            <div class="col-12 m-0 p-0">
+                <div class="form-group">
+                     <label for="" style="font-weight: 600">Confirmar contraseña:</label>   
+                     <input style="font-size: 12px" id="pass2" type="password" class="form-control form-control-sm">
+                </div>
+            </div>
+         </div>
+         <p id="p-alerta-con" class="alert alert-danger-lr py-1" style="font-style: italic; font-weight: 550; text-align: center; display: none">¡ Contraseñas no coinciden !</p>
+         <p id="p-alerta-vac" class="alert alert-danger-lr py-1" style="font-style: italic; font-weight: 550; text-align: center; display: none">¡ Complete los campos correctamente !</p>
+      </div>
+      <div class="modal-footer"> 
+        <button id="btn-validar" type="button" onclick="cambiar_clave()" class="btn bg-azul text-light btn-sm">Cambiar Contraseña</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
 <!-- / Contenedor de la pagina -->
 <?php include "../../../layouts/administrador/footer.php";?>
 <!-- scripts -->
@@ -315,14 +383,15 @@ ul#tabs-ver .nav-item .nav-link{
             for(var i=0; i < resp.usuarios.length; i++){
                 html+="<tr>";
                 html+="<td>("+resp.usuarios[i].tipodoc+" ) "+resp.usuarios[i].numdoc+"</td>";
-                html+="<td>"+( resp.usuarios[i].nombre1 ?? '')+" "+(resp.usuarios[i].nombre2 ?? '')+"</td>";
-                html+="<td>"+( resp.usuarios[i].apellido1 ?? '' )+" "+( resp.usuarios[i].apellido2 ?? '' )+"</td>";
-                html+="<td>"+( resp.usuarios[i].usuario ?? '' )+"</td>";
+                html+="<td id='td_nombre_"+resp.usuarios[i].id+"'>"+( resp.usuarios[i].nombre1 ?? '')+" "+(resp.usuarios[i].nombre2 ?? '')+"</td>";
+                html+="<td id='td_apellido_"+resp.usuarios[i].id+"'>"+( resp.usuarios[i].apellido1 ?? '' )+" "+( resp.usuarios[i].apellido2 ?? '' )+"</td>";
+                html+="<td id='td_usuario_"+resp.usuarios[i].id+"'>"+( resp.usuarios[i].usuario ?? '' )+"</td>";
                 html+="<td>"+( resp.usuarios[i].email ?? '' )+"</td>";
                 html+="<td>"+( resp.usuarios[i].roluser ? rol_user(resp.usuarios[i].roluser) : '' )+"</td>";
                 html+="<td>";
                     html+="<a disabled href='/apps/rol-administrador/usuarios/ver/"+resp.usuarios[i].id+"' class='cl-azul mx-1'><i class='fas fa-eye'></i></a>";
                     html+="<a disabled href='/apps/rol-administrador/usuarios/editar/"+resp.usuarios[i].id+"' class='cl-amarillo mx-1 mr-2'><i class='fas fa-edit'></i></a>  ";
+                    html+="<a disabled href='javascript:pre_cambio_contrasena("+resp.usuarios[i].id+")' class='cl-rojo mx-1 mr-2'><i class='fa fa-unlock-alt'></i></a>  ";
                 html+="</td>";
                 html+="</tr>";
             }
@@ -332,6 +401,59 @@ ul#tabs-ver .nav-item .nav-link{
                 swal.close();
             }, 200);
         });
+    }
+
+    function pre_cambio_contrasena(id_user){
+        $("#pass1").val("");
+        $("#pass2").val("");
+        $("#id_pass").val(id_user);
+        $("#sp_usuario").text( $("#td_usuario_"+id_user).text() );
+        $("#sp_nombre").text( $("#td_nombre_"+id_user).text() + " " + $("#td_apellido_"+id_user).text()  );
+        $("#md_asignar").modal("show");
+    }
+
+    function cambiar_clave(){
+        var pass1 = $("#pass1").val();
+        var pass2 = $("#pass2").val();
+        var id_pass = $("#id_pass").val();
+
+        if( (pass1 == "") || (pass2 == "") ){
+            $("#p-alerta-vac").show(50);
+            setTimeout(() => {
+                $("#p-alerta-vac").hide(50);
+            }, 4000);
+        }else{
+            if((pass1 == pass2)){
+                var parametros = [{"name": "password", "value" : pass1 },{ "name" : "id", "value" : $("#id_pass").val() }];
+                var url    = '/apps/controller/usuario';
+                var data   = { funcion: "editar", parametros: parametros };
+                var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
+                fetch(url, miInit).then(res => res.json()).catch(error =>  {
+                    console.log(error);
+                    swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
+                }).then(resp => {
+                    if(resp == "OK"){
+                        swal('¡Registro actualizado satisfactoriamente!', { closeOnClickOutside: false, buttons: false, icon : "success"});
+                        setTimeout(() => { location.href = "/apps/rol-administrador/usuarios/listado";  }, 3000);
+                    }else{
+                        console.error(resp);
+                        const wrapper = document.createElement('p');
+                        wrapper.innerHTML = Exception(resp);
+                        swal({
+                            title: "GoVista",
+                            content: wrapper, 
+                            icon: "warning"
+                        });
+                    }
+
+                }); 
+            }else{
+                $("#p-alerta-con").show(50);
+                setTimeout(() => {
+                    $("#p-alerta-con").hide(50);
+                }, 4000);
+            }
+        }        
     }
 
     function cargando(){
@@ -448,6 +570,34 @@ ul#tabs-ver .nav-item .nav-link{
             break;
         }
     }
+
+    function Exception(arr){
+        if( arr["errorInfo"] ){
+            if( arr["errorInfo"][0] == '23000' ){
+                console.log();
+                var array = TextoComillas(arr["errorInfo"][2]);
+                var campo = array[1], valor = array[0];
+                var mensaje = "<p>¡Advertencia, El campo <b><i>'"+campo+"'</i></b> con valor <b><i>'"+valor+"'</i></b> ya se encuentra registrado.!</p>";
+                return mensaje;
+            }
+        }
+        return "¡Se ha generado un error en el servidor, por favor contacte al administrador!";
+    }
+
+    function TextoComillas(texto) {
+        const regex = /[^'"\\]*(?:\\.[^'"\\]*)*(["'])([^"'\\]*(?:(?:(?!\1)["']|\\.)[^"'\\]*)*)\1/gy;
+        var   grupo,
+            resultado = [];
+        
+        while ((grupo = regex.exec(texto)) !== null) {
+            //el grupo 1 contiene las comillas utilizadas
+            //el grupo 2 es el texto dentro de éstas
+            resultado.push(grupo[2]);
+        }
+        return resultado;
+    }
+    </script>
+
 
 </script>
 <!-- / scripts -->

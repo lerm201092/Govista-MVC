@@ -15,7 +15,7 @@
                             LEFT JOIN usuarios AS u ON u.id = ue.id_usuario
                             LEFT JOIN empresas AS e ON e.id = ue.id_empresa "
                         .($condicion ? Self::Condicionales($condicion)              : '' )
-                        .( $offset   ? " ORDER BY id DESC LIMIT 15 OFFSET ".$offset : '' ); 
+                        ."  ORDER BY id DESC ".( $offset   ? " LIMIT 15 OFFSET ".$offset : '' ); 
                         // return $consulta;
             $stmt = $this->db->prepare($consulta);
             $stmt->execute();

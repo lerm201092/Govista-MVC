@@ -129,6 +129,7 @@
         $resp = $DB->Eliminar_Registros('usuario_empresa', $parametros["id"]);
         return $resp;
     }
+    
     // function listar($parametros){ 
     //     $usuario = new UsuarioModel;
     //     $cant_reg_x_page = 15;

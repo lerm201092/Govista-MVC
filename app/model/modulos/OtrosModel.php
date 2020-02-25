@@ -29,6 +29,7 @@
             $this->resp = array();
             $aux = Self::config_editar($parametros);
             $consulta = "UPDATE ".$tabla." SET".$aux["set"]." WHERE id = ".$aux["id"];
+            // return $consulta;
             $stmt = $this->db->prepare($consulta);
             try{
                 $stmt->execute();
@@ -54,7 +55,7 @@
 
         public function Listar_Registros( $tabla = null, $condicion = null, $offset = null ){
             $this->resp = array();
-            $consulta = "SELECT * FROM ".$tabla." ".Self::Condicionales($condicion).( $offset ? " ORDER BY id DESC LIMIT 15 OFFSET ".$offset : "");
+            $consulta = "SELECT * FROM ".$tabla." ".Self::Condicionales($condicion)." ORDER BY id DESC ".( $offset ? "LIMIT 15 OFFSET ".$offset : "");
             $stmt = $this->db ->prepare($consulta);
             try { 
                 $total = 0;
@@ -195,7 +196,11 @@
             foreach ($entrada as $item) {
                 if($item["name"] != "id" ){
                     if($item["name"] != "id_dpto" ){
-                        $set .= " ".$item["name"]." = '".$item["value"]."',";
+                        if($item["name"] == "password"){
+                            $set .= " ".$item["name"]." = '".password_hash($item["value"], PASSWORD_DEFAULT)."',";
+                        }else{
+                            $set .= " ".$item["name"]." = '".$item["value"]."',";
+                        }  
                     }
                 }else{
                     $id = $item["value"];
