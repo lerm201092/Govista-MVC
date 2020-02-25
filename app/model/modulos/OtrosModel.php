@@ -12,6 +12,7 @@
         }
 
         public function Guardar_Registros( $tabla, $parametros){
+            $this->resp = array();
             $aux = Self::config_Crear($parametros);
             $consulta = "INSERT INTO ".$tabla." (".$aux["campos"] .") VALUES (".$aux["valor"].")";
             $stmt = $this->db->prepare($consulta);
@@ -25,6 +26,7 @@
         }
 
         public function Editar_Registros( $tabla, $parametros){
+            $this->resp = array();
             $aux = Self::config_editar($parametros);
             $consulta = "UPDATE ".$tabla." SET".$aux["set"]." WHERE id = ".$aux["id"];
             $stmt = $this->db->prepare($consulta);
@@ -37,7 +39,21 @@
             return $this->resp;        
         }
 
+        public function Eliminar_Registros( $tabla, $id ){
+            $this->resp = array();
+            $consulta = "DELETE FROM ".$tabla." WHERE id = ".$id;
+            $stmt = $this->db->prepare($consulta);
+            try{
+                $stmt->execute();
+                $this->resp = "OK";
+            }catch(PDOException $e){
+                return $e;
+            }
+            return $this->resp;        
+        }
+
         public function Listar_Registros( $tabla = null, $condicion = null, $offset = null ){
+            $this->resp = array();
             $consulta = "SELECT * FROM ".$tabla." ".Self::Condicionales($condicion).( $offset ? " ORDER BY id DESC LIMIT 15 OFFSET ".$offset : "");
             $stmt = $this->db ->prepare($consulta);
             try { 
@@ -52,7 +68,8 @@
             return  $this->resp;
         }
 
-        public function Cantidad_Registros($tabla = null, $condicion = null){            
+        public function Cantidad_Registros($tabla = null, $condicion = null){    
+            $this->resp = array();        
             $consulta = "SELECT id FROM ".$tabla." ".Self::Condicionales($condicion);
             $stmt = $this->db ->prepare($consulta);
             try { 

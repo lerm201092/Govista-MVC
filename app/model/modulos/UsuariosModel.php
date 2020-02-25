@@ -10,7 +10,7 @@
 
         
         public function Usuario_Empresa($condicion = null, $offset = null){
-            $consulta = "SELECT u.*, e.id as id_empresa, e.nombre as empresa 
+            $consulta = "SELECT u.*, ue.id as registro, e.id as id_empresa, e.nit as nit, e.nombre as empresa 
                         FROM usuario_empresa ue
                             LEFT JOIN usuarios AS u ON u.id = ue.id_usuario
                             LEFT JOIN empresas AS e ON e.id = ue.id_empresa "
@@ -87,6 +87,23 @@
                 $this->resp = $arr;                 
             }
             return $this->resp;             
+        }
+
+        public function Validar_Cantidad($parametros){    
+            $this->resp = array();        
+            $consulta = "SELECT ue.id
+            FROM usuario_empresa ue
+                LEFT JOIN usuarios AS u ON u.id = ue.id_usuario
+                LEFT JOIN empresas AS e ON e.id = ue.id_empresa
+             WHERE u.usuario = '".$parametros['usuario']."'
+             AND e.nit = '".$parametros['nit']."'";
+            $stmt = $this->db ->prepare($consulta);
+            try { 
+                $stmt->execute();
+            }catch(PDOException $e){
+                echo $e->getMessage();
+            }
+            return $stmt->rowCount();
         }
 
         function Validar_Pago($entrada){

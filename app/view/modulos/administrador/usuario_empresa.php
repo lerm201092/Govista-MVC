@@ -237,7 +237,7 @@ ul#tabs-ver .nav-item .nav-link{
         <div class="card-body">
                 <!-- link de los tabs -->
                 <div class="row justify-content-end mb-3">
-                    <a href="/apps/rol-administrador/usuarios/nuevo" class="btn bg-verde text-light font-weight-bold float-right mx-1"><span class="fas fa-user-check mr-2"></span>Nueva Asignación</a>  
+                    <a  data-toggle="modal" data-target="#md_asignar" href="javascript:void(0)" class="btn bg-verde text-light font-weight-bold float-right mx-1"><span class="fas fa-user-check mr-2"></span>Nueva Asignación</a>  
                 </div>
                 <!-- contenedor de los tabs -->
                 <table id="tbl-pacientes" class="table table-sm table-striped table-bordered">
@@ -245,7 +245,7 @@ ul#tabs-ver .nav-item .nav-link{
                         <th class="d-none d-sm-none d-md-table-cell">Identificacion</th>
                         <th>Usuario</th>
                         <th class="d-none d-sm-none d-md-table-cell">Nombre de usuario</th>
-                        <th class="d-none d-sm-none d-md-table-cell">Rol</th>
+                        <th class="d-none d-sm-none d-md-table-cell">Nit</th>
                         <th class="d-none d-sm-none d-md-table-cell">Empresa</th>
                         <th></th>
                     </thead>
@@ -271,6 +271,70 @@ ul#tabs-ver .nav-item .nav-link{
         </div>
     </div>
 </div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="md_asignar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sp_name">Nueva Asignación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+         <div class="row">
+            <div class="col-3 m-0 p-0">
+                <div class="form-group">
+                     <label for="">Usuario:</label>   
+                     <input style="font-size: 12px" id="fil_usuario" type="text" class="form-control form-control-sm">
+                     <input name="id_usuario" type="hidden" /> 
+                </div>
+            </div>
+            <div class="col-9 m-0 p-0">
+                <div class="form-group"> 
+                    <label for="">&nbsp;</label>  
+                    <input  style="font-size: 12px" id="fil_usuario_des" type="text" disabled class="form-control form-control-sm">
+                </div>
+            </div>
+         </div>
+
+         <div class="row">
+            <div class="col-3 m-0 p-0">
+                <div class="form-group">
+                     <label for="">NIT (Empresa):</label>   
+                     <input name="nit" style="font-size: 12px" id="fil_nit" type="text" class="form-control form-control-sm">
+                     <input name="id_empresa" type="hidden" /> 
+                </div>
+            </div>
+            <div class="col-9 m-0 p-0">
+                <div class="form-group"> 
+                    <label for="">&nbsp;</label>  
+                    <input  style="font-size: 12px" id="fil_nit_des" type="text" disabled class="form-control form-control-sm">
+                </div>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-12 p-0">
+                <p id="p-alerta" class="alert alert-danger py-1 d-none">¡Este usuario ya tiene asignada la empresa ingresada!</p>
+            </div>
+         </div>
+      </div>
+      <div class="modal-footer"> 
+        <button id="btn-guardar" onclick="guardar()" type="button" class="d-none btn bg-verde text-light btn-sm" onclick="validar()">Guardar</button>
+        <button id="btn-limpiar" onclick="limpiar_validar()" type="button" class="d-none btn bg-amarillo text-light btn-sm" onclick="validar()">Limpiar</button>
+        <button id="btn-validar" type="button" class="btn bg-azul text-light btn-sm" onclick="validar()">Validar</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 <!-- / Contenedor de la pagina -->
 <?php include "../../layouts/administrador/footer.php";?>
 <!-- scripts -->
@@ -316,11 +380,11 @@ $("#li-asignar").addClass("active");
                     html+=( resp.usuarios[i].nombre1 ?? ''  )+" "+(resp.usuarios[i].nombre2 ?? '');
                     html+=" "+( resp.usuarios[i].apellido1 ?? '')+" "+(resp.usuarios[i].apellido2 ?? '');
                 html+="</td>";
-                html+="<td>"+( resp.usuarios[i].usuario ?? '' )+"</td>";
-                html+="<td>"+( resp.usuarios[i].roluser ? rol_user(resp.usuarios[i].roluser) : '' )+"</td>";
+                html+="<td>"+( resp.usuarios[i].usuario ?? '' )+" ( "+( resp.usuarios[i].roluser ? rol_user(resp.usuarios[i].roluser) : '' )+" )</td>";
+                html+="<td>"+( resp.usuarios[i].nit ?? '' )+"</td>";
                 html+="<td>"+( resp.usuarios[i].empresa ?? '' )+"</td>";                
                 html+="<td>";
-                    html+="<a disabled href='/apps/rol-administrador/usuarios/editar/"+resp.usuarios[i].id+"' class='cl-amarillo mx-1 mr-2'><i class='fas fa-edit'></i></a>  ";
+                    html+="<a disabled href='javascript:eliminar("+resp.usuarios[i].registro+")' class='cl-rojo mx-1 mr-2'><i class='fas fa-trash-alt'></i></a>  ";
                 html+="</td>";
                 html+="</tr>";
             }
@@ -445,6 +509,172 @@ $("#li-asignar").addClass("active");
                 return 'Hola mundo';
             break;
         }
+    }
+
+
+    function validar(){
+        var usuario = $("#fil_usuario").val();
+        var nit     = $("#fil_nit").val();
+
+        if( usuario.trim() != "" ){
+            if( nit.trim() != "" ){
+                $("#fil_usuario").prop("disabled", "disabled");                
+                $("#fil_nit").prop("disabled", "disabled");
+                $("#btn-validar").addClass("d-none");
+                $("#btn-limpiar").removeClass("d-none");
+                var url = '/apps/controller/usuario';
+                var parametros = { "usuario" : usuario, "nit" : nit };
+                var data = { funcion : "validar", parametros : parametros };
+                var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
+                cargando();
+                fetch(url, miInit).then(res => res.json()).catch(error =>  {
+                    console.log(error);
+                    swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
+                }).then(resp => {
+                    console.log(resp);
+                    var sw = 0;
+                    if(resp.usuario){
+                        $("#fil_usuario_des").val(resp.usuario).css({"color":"black", "font-weight":"bold"});
+                        $("input[name=id_usuario]").val(resp.id_usuario);
+                        sw = sw + 1;
+                    }else{
+                        $("#fil_usuario_des").val("### Usuario no encontrado ###").css({"color":"#b80f02", "font-weight":"bold"});
+                    }             
+                    if(resp.empresa){
+                        sw = sw + 1;
+                        $("#fil_nit_des").val(resp.empresa).css({"color":"black", "font-weight":"bold"});
+                        $("input[name=id_empresa]").val(resp.id_empresa);
+                    }else{
+                        $("#fil_nit_des").val("### Empresa no encontrada ###").css({"color":"#b80f02", "font-weight":"bold"});
+                    } 
+
+                    if(resp.sw == 0){
+                        if(sw == 2){
+                            $("#btn-guardar").removeClass("d-none");
+                        }
+                    }else{
+                        $("#p-alerta").removeClass("d-none");
+                    }
+                    setTimeout(() => {
+                        swal.close();
+                    }, 200);
+                });
+
+
+
+
+
+
+            }else{
+                swal('GoVista', 'Ingrese el campo NIT.', 'warning');
+            }
+        }else{
+            swal('GoVista', 'Ingrese el campo usuario.', 'warning');
+        }
+
+    }
+
+    $(document).ready(function(){
+        $('#md_asignar').on('show.bs.modal', function (e) {
+            limpiar_validar();
+        }).on("shown.bs.modal", function (e) {
+             $("#fil_usuario").focus();
+        });
+    })
+
+    function limpiar_validar(){
+        $("#fil_usuario").removeAttr("disabled").val("");                
+        $("#fil_nit").removeAttr("disabled").val("");   
+        $("#fil_usuario_des").val("");                
+        $("#fil_nit_des").val("");   
+        $("input[name=id_usuario]").val("");
+        $("input[name=id_empresa]").val("");
+        $("#p-alerta").addClass("d-none");
+        $("#btn-guardar").addClass("d-none");
+        $("#btn-limpiar").addClass("d-none");
+        $("#btn-validar").removeClass("d-none");
+        $("#fil_usuario").focus();
+    }
+
+    function eliminar(id){
+        swal({
+            title: "GoVista",
+            text: "¿Realmente desea eliminar el registro? Num:"+id,
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+            })
+        .then((willDelete) => {
+            if (willDelete) {
+                var url = '/apps/controller/usuario';
+                var data = { funcion : "eliminar_usuario_empresa", parametros : {"id" : id} };
+                var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
+                cargando();
+                fetch(url, miInit).then(res => res.json()).catch(error =>  {
+                    console.log(error);
+                    swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
+                }).then(resp => {
+                    
+                    if(resp == "OK"){
+                        swal('¡Registro eliminado satisfactoriamente!', { closeOnClickOutside: false, buttons: false, icon : "success"});
+                        setTimeout(() => { location.href = "/apps/rol-administrador/usuario_empresa/asignar";  }, 3000);
+                    }
+
+
+                });
+            }
+        });
+    }
+
+    function guardar(){
+        var parametros = [{"name": "id_usuario", "value" : $("input[name=id_usuario]").val()}, {"name" : "id_empresa", "value" : $("input[name=id_empresa]").val()}, { "name" : "state", "value" : "AC" }];
+        var url    = '/apps/controller/usuario';
+        var data   = { funcion: "crear_usuario_empresa", parametros: parametros };
+        var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
+        fetch(url, miInit).then(res => res.json()).catch(error =>  {
+            console.log(error);
+            swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
+        }).then(resp => {
+            if(resp == "OK"){
+                swal('¡Registro guardado satisfactoriamente!', { closeOnClickOutside: false, buttons: false, icon : "success"});
+                setTimeout(() => { location.href = "/apps/rol-administrador/usuario_empresa/asignar";  }, 3000);
+            }else{
+                const wrapper = document.createElement('p');
+                wrapper.innerHTML = Exception(resp);
+                swal({
+                    title: "GoVista",
+                    content: wrapper, 
+                    icon: "warning"
+                });
+            }
+
+        });           
+    }
+
+    function Exception(arr){
+        if( arr["errorInfo"] ){
+            if( arr["errorInfo"][0] == '23000' ){
+                console.log();
+                var array = TextoComillas(arr["errorInfo"][2]);
+                var campo = array[1], valor = array[0];
+                var mensaje = "<p>¡Advertencia, El campo <b><i>'"+campo+"'</i></b> con valor <b><i>'"+valor+"'</i></b> ya se encuentra registrado.!</p>";
+                return mensaje;
+            }
+        }
+        return "¡Se ha generado un error en el servidor, por favor contacte al administrador!";
+    }
+
+    function TextoComillas(texto) {
+        const regex = /[^'"\\]*(?:\\.[^'"\\]*)*(["'])([^"'\\]*(?:(?:(?!\1)["']|\\.)[^"'\\]*)*)\1/gy;
+        var   grupo,
+            resultado = [];
+        
+        while ((grupo = regex.exec(texto)) !== null) {
+            //el grupo 1 contiene las comillas utilizadas
+            //el grupo 2 es el texto dentro de éstas
+            resultado.push(grupo[2]);
+        }
+        return resultado;
     }
     </script>
 <!-- / scripts -->

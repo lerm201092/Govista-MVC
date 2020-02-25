@@ -99,6 +99,36 @@
         $resp = $DB->Editar_Registros('usuarios', $parametros);
         return $resp;
     }
+
+    function validar($parametros){
+        $DB          = new OtrosModel;
+        $UsuarioDB   = new UsuariosModel; 
+        $usuario     = $DB->Listar_Registros('usuarios', [ 'usuario' => $parametros['usuario']  ]); 
+        $empresa     = $DB->Listar_Registros('empresas', [ 'nit'     => $parametros['nit']      ]); 
+        $resp = array();
+        $resp["sw"]  = $UsuarioDB->Validar_Cantidad($parametros);
+        if($usuario){ 
+            $resp["usuario"] = $usuario[0]["nombre1"]." ".$usuario[0]["nombre2"]." ".$usuario[0]["apellido1"]." ".$usuario[0]["apellido2"]; 
+            $resp["id_usuario"] = $usuario[0]["id"];
+        }
+        if($empresa){ 
+            $resp["empresa"] = $empresa[0]["nombre"]; 
+            $resp["id_empresa"] = $empresa[0]["id"]; 
+        }
+        return $resp;
+    }
+
+    function crear_usuario_empresa($parametros){ 
+        $DB = new OtrosModel;
+        $resp = $DB->Guardar_Registros('usuario_empresa', $parametros);
+        return $resp;
+    }
+
+    function eliminar_usuario_empresa($parametros){ 
+        $DB = new OtrosModel;
+        $resp = $DB->Eliminar_Registros('usuario_empresa', $parametros["id"]);
+        return $resp;
+    }
     // function listar($parametros){ 
     //     $usuario = new UsuarioModel;
     //     $cant_reg_x_page = 15;
