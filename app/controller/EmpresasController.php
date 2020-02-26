@@ -23,8 +23,8 @@
         $DB                 = new OtrosModel;
         $num_page           = $parametros["pagina"];
         $offset             = ($num_page-1) * 15;
-        $resp["cant_max"]   = ceil( $DB->Cantidad_Registros( 'empresas' ) / 15 );     
-        $resp["empresas"]   = $DB->Listar_Registros('empresas', null, $offset);             
+        $resp["cant_max"]   = ceil( $DB->Cantidad_Registros(null, 'empresas' ) / 15 );     
+        $resp["empresas"]   = $DB->Listar_Registros(null, 'empresas', null, $offset);             
         return $resp;
     }  
 

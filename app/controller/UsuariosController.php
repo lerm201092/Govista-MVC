@@ -49,8 +49,8 @@
         $DB                 = new OtrosModel;
         $num_page           = $parametros["pagina"];
         $offset             = ($num_page-1) * 15;
-        $resp["cant_max"]   = ceil( $DB->Cantidad_Registros( 'usuarios' ) / 15 );     
-        $resp["usuarios"]   = $DB->Listar_Registros('usuarios', null, $offset);             
+        $resp["cant_max"]   = ceil( $DB->Cantidad_Registros( null, 'usuarios' ) / 15 );     
+        $resp["usuarios"]   = $DB->Listar_Registros(null, 'usuarios', null, $offset);             
         return $resp;
     }  
 
@@ -59,7 +59,7 @@
         $UsuarioDB          = new UsuariosModel;
         $num_page           = $parametros["pagina"];
         $offset             = ($num_page-1) * 15;
-        $resp["cant_max"]   = ceil( $DB->Cantidad_Registros( 'usuario_empresa' ) / 15 );     
+        $resp["cant_max"]   = ceil( $DB->Cantidad_Registros( null, 'usuario_empresa' ) / 15 );     
         $resp["usuarios"]   = $UsuarioDB->Usuario_Empresa( null, $offset );             
         return $resp;
     }  
@@ -103,8 +103,8 @@
     function validar($parametros){
         $DB          = new OtrosModel;
         $UsuarioDB   = new UsuariosModel; 
-        $usuario     = $DB->Listar_Registros('usuarios', [ 'usuario' => $parametros['usuario']  ]); 
-        $empresa     = $DB->Listar_Registros('empresas', [ 'nit'     => $parametros['nit']      ]); 
+        $usuario     = $DB->Listar_Registros(null, 'usuarios', [ 'usuario' => "'".$parametros['usuario']."'"  ]); 
+        $empresa     = $DB->Listar_Registros(null, 'empresas', [ 'nit'     =>  "'".$parametros['nit']."'"      ]); 
         $resp = array();
         $resp["sw"]  = $UsuarioDB->Validar_Cantidad($parametros);
         if($usuario){ 

@@ -97,6 +97,13 @@
 <?php include "../../../layouts/medico/footer.php";?>
 <!-- scripts -->
 <script>
+
+String.prototype.capitalize = function(allWords) {
+   return (allWords) ? // if all words
+      this.split(' ').map(word => word.capitalize()).join(' ') : //break down phrase to words then  recursive calls until capitalizing all words
+      this.charAt(0).toUpperCase() + this.slice(1); // if allWords is undefined , capitalize only the first word , mean the first char of the whole string
+}
+
 $("#li-pacientes").addClass("active");   
     $("#li-anterior").addClass("disabled");
     $("#li-primero").addClass("disabled");
@@ -160,9 +167,9 @@ $("#li-pacientes").addClass("active");
             for(var i=0; i < resp.pacientes.length; i++){
                 html+="<tr>";
                 html+="<td class='d-none d-sm-none d-md-table-cell'>( "+resp.pacientes[i].tipodoc+" ) "+resp.pacientes[i].numdoc+"</td>";
-                html+="<td>"+resp.pacientes[i].name1+" "+ ( resp.pacientes[i].name2 ? resp.pacientes[i].name2 : '' )+"</td>";
-                html+="<td>"+resp.pacientes[i].surname1+" "+ ( resp.pacientes[i].surname2 ? resp.pacientes[i].surname2 : '' ) +"</td>";
-                html+="<td class='d-none d-sm-none d-md-table-cell'>"+ ( resp.pacientes[i].munic ?  resp.pacientes[i].munic+" ( "+resp.pacientes[i].dpto+" )"  : '') +" </td>";
+                html+="<td>"+resp.pacientes[i].nombre1+" "+ ( resp.pacientes[i].nombre2 ?? '' )+"</td>";
+                html+="<td>"+resp.pacientes[i].apellido1+" "+ ( resp.pacientes[i].apellido2 ?? '' ) +"</td>";
+                html+="<td class='d-none d-sm-none d-md-table-cell'>"+ ( resp.pacientes[i].ciudad ? resp.pacientes[i].ciudad.toLowerCase().capitalize(true) : '') +" </td>";
                 html+="<td class='d-none d-sm-none d-md-table-cell'>"+resp.pacientes[i].state+"</td>";
                 html+="<td class='pl-3'><a href='/apps/rol-medico/pacientes/ver/"+resp.pacientes[i].id+"' title='Ver Paciente'><i class='cl-azul fas fa-eye'></i></a><a href='/apps/rol-medico/pacientes/editar/"+resp.pacientes[i].id+"' title='Editar Paciente' class='ml-2'><i class='cl-morado fas fa-user-edit'></i></a></td>";
                 html+="</tr>";

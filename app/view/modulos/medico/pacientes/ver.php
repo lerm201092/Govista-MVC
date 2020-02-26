@@ -3,6 +3,62 @@
 <?php include "../../../layouts/medico/inicio.php";?>
 <!-- head -->
 <style>
+
+.mat-label {
+  display: block;
+  font-size: 14px;
+  font-weight:450!important;
+  transform: translateY(25px);
+  color: gray;
+  transition: all 0.2s;
+}
+
+.mat-input {
+  position: relative;
+  background: transparent;
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 2px 0;
+  font-size: 16px;
+  border-bottom: .5px solid #e4e4e4;
+}
+
+.mat-div {
+  padding: 10px 0 0 0;  
+  position: relative;
+}
+
+.mat-div:after, .mat-div:before {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #e2e2e2; 
+  bottom: 0;
+  left: 0;
+  transition: all 0.2s;
+}
+
+.mat-div::after {
+  background-color: #8E8DBE;
+  transform: scaleX(0);
+}
+
+.is-active::after {
+  transform: scaleX(1);
+}
+
+.is-active .mat-label {
+  color: #8E8DBE;
+}
+
+.is-completed .mat-label {
+  font-size: 13px;
+  transform: translateY(0);
+}
+
 .bg-verde{
     background:#5eb562; 
 }
@@ -20,263 +76,172 @@
 }
 
 .bg-morado{
-    background:#9c27b0; 
-}
+            background:#9c27b0; 
+		}
+		
+		.cl-verde{
+            color:#5eb562; 
+        }
 
+        .cl-amarillo{
+            color:#fc9208; 
+        }
 
-.cl-verde{
-    color:#5eb562; 
-}
+        .cl-rojo{
+            color:#ec4a47; 
+        }
 
-.cl-amarillo{
-    color:#fc9208; 
-}
+        .cl-azul{
+            color:#12b8cd; 
+        }
 
-.cl-rojo{
-    color:#ec4a47; 
-}
+        .cl-morado-light{
+            color:#a088a4; 
+        }
 
-.cl-azul{
-    color:#12b8cd; 
-}
+        ul#tabs-ver .nav-item .nav-link{
+          font-weight:400;
+          color: #aba8a8!important;
+		}
+		
+		.card-body p{
+			font-size:14px;
+		}
+        ul#tabs-ver  .nav-item .active{
+            font-weight:600;
+            color: #9c27b0!important;
+        }
 
-.cl-morado{
-    color:#9c27b0; 
-}
+        .titulo{
+            color: #a088a4!important;
+            font-weight: 600;
+            font-style : italic;
+        }
 
-.mat-label {
-    display: block;
-    font-size: 14px;
-    font-weight:450!important;
-    transform: translateY(25px);
-    color: gray;
-    transition: all 0.2s;
-  }
-  .mat-input {
-    position: relative;
-    background: transparent;
-    width: 100%;
-    border: none;
-    outline: none;
-    padding: 2px 0;
-    font-size: 16px;
-    border-bottom: 1px solid #e4e4e4;
-  }
-  
-    
-  .mat-div {
-    padding: 10px 0 0 0;  
-    position: relative;
-  }
-  
-  .mat-div:after, .mat-div:before {
-    content: "";
-    position: absolute;
-    display: block;
-    width: 100%;
-    height: 2px;
-    background-color: #e2e2e2; 
-    bottom: 0;
-    left: 0;
-    transition: all 0.2s;
-  }
-  
-  .mat-div::after {
-    background-color: #8E8DBE;
-    transform: scaleX(0);
-  }
-  
-  .is-active::after {
-    transform: scaleX(1);
-  }
-  
-  .is-active .mat-label {
-    color: #8E8DBE;
-  }
-  
-  .is-completed .mat-label {
-    font-size: 13px;
-    transform: translateY(0);
-  }
+        .div_celda{
+            border-bottom: 1px solid #e3e3e3;
+        }
 </style>
 <!-- / head -->
 <?php include "../../../layouts/medico/body.php";?>
 <!-- Contenedor de la pagina -->
-<div class="card mx-2">
-    <div class="card-header">
-        <h6 class="cl-morado">Información del paciente <i>(<span id="nom_corto"></span>)</i></h6>
-    </div>
-    <div class="card-body">
-        <div id="accordion">
-            <!-- Acordeon 1 -->
-            <div class="card">
-                <div class="card-header" id="headingOne">
-                    <h5 class="mb-0">
-                        <button class="btn btn-link col-12" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                            <span class="cl-morado float-left font-weight-bold">Datos personales </span><span class="cl-morado float-right"><i class="fas fa-folder-open"></i></span>
-                        </button>
-                    </h5>
-                </div>
 
-                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
-                    <div class="card-body" style="padding: 5px 50px 30px">
-                        <?php include "./tab-ver/div1.php"; ?>
+<div class="row px-1">
+    <div class="col-12 card px-0">
+        <div class="card-header mx-0">
+            <h5>Ver información de usuarios </h5>
+        </div>
+        <div class="card-body px-4">
+            <div class="row">
+                <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Identificación:</span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="tipodoc"></span>&nbsp;-&nbsp;<span tipo="campo_bd" id="numdoc"></span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Usuario:</span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="usuario"></span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Nombre:</span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="nombre1"></span>&nbsp;<span tipo="campo_bd" id="nombre2"></span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Apellido:</span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="apellido1"></span>&nbsp;<span tipo="campo_bd" id="apellido2"></span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Email:</span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="email"></span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Teléfono:</span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="telefono"></span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Dirección:</span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="direccion"></span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Ciudad:</span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="muni"></span>&nbsp;-&nbsp;<span tipo="campo_bd" id="dpto"></span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><sapn class="titulo">Rol:</sapn></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="descrol"></span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Estado:</span></div>
+                <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="estado_f"></span></div>
+                <div id="paciente" class="d-none" style="width:100%">
+                    <div class="row">
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Eps:</span></div>
+                        <div class="col-6 col-lg-9 py-2 div_celda "><span tipo="campo_bd" id="eps"></span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Carnet:</span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="pac_carnet"></span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Teléfono contacto:</span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="pac_contact_phone"></span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Nombre contacto:</span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="pac_contact_name"></span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Apellido contacto:</span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="pac_contact_surname"></span></div>    
+
+
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Email contacto:</span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="pac_contact_email"></span></div>                     
                     </div>
                 </div>
-            </div>
-
-            <!-- Acordeon 2 -->
-            <div class="card">
-                <div class="card-header" id="headingTwo">
-                    <h5 class="mb-0">
-                        <button class="btn btn-link collapsed col-12" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            <span class="cl-morado float-left font-weight-bold">Datos de afiliación</span><span class="cl-morado float-right"><i class="fas fa-folder-open"></i></span>
-                        </button>
-                    </h5>
-                </div>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                    <div class="card-body">
-                        <?php include "./tab-ver/div2.php"; ?>
+                <div id="medico" class="d-none" style="width:100%">
+                    <div class="row">
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span class="titulo">Especialidad:</span></div>
+                        <div class="col-6 col-lg-3 py-2 div_celda "><span tipo="campo_bd" id="med_especialidad"></span></div>                  
                     </div>
                 </div>
-            </div>
 
 
-            <!-- Acordeon 3 -->
-            <div class="card">
-                <div class="card-header" id="heading3">
-                    <h5 class="mb-0">
-                        <button class="btn btn-link collapsed col-12" data-toggle="collapse" data-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
-                            <span class="cl-morado float-left font-weight-bold">Datos de contacto</span><span class="cl-morado float-right"><i class="fas fa-folder-open"></i></span>
-                        </button>
-                    </h5>
-                </div>
-                <div id="collapse3" class="collapse" aria-labelledby="heading3" data-parent="#accordion">
-                    <div class="card-body">
-                        <?php include "./tab-ver/div3.php"; ?>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Acordeon 3 -->
-            <div class="card">
-                <div class="card-header" id="heading4">
-                    <h5 class="mb-0">
-                        <button class="btn btn-link collapsed col-12" data-toggle="collapse" data-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
-                            <span class="cl-morado float-left font-weight-bold">Datos de contacto de emergencia</span><span class="cl-morado float-right"><i class="fas fa-folder-open"></i></span>
-                        </button>
-                    </h5>
-                </div>
-                <div id="collapse4" class="collapse" aria-labelledby="heading4" data-parent="#accordion">
-                    <div class="card-body">
-                        <?php include "./tab-ver/div4.php"; ?>
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- Acordeon 3 -->
-            <div class="card">
-                <div class="card-header" id="heading5">
-                    <h5 class="mb-0">
-                        <button class="btn btn-link collapsed col-12" data-toggle="collapse" data-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
-                            <span class="cl-morado float-left font-weight-bold">Datos de los padres</span><span class="cl-morado float-right"><i class="fas fa-folder-open"></i></span>
-                        </button>
-                    </h5>
-                </div>
-                <div id="collapse5" class="collapse" aria-labelledby="heading5" data-parent="#accordion">
-                    <div class="card-body">
-                        <?php include "./tab-ver/div5.php"; ?>
-                    </div>
-                </div>
-            </div>
 
             
-            <div class="row justify-content-end mb-3">                
-                <a href="/apps/rol-medico/pacientes/listado "class="btn text-light bg-rojo mr-2"><i class="fas fa-caret-left mr-2"></i>Regresar</a>
-            </div>              
+            </div>
 
-
+            <div class="row py-4 mt-4">
+				<a href="/apps/rol-medico/pacientes/listado" class="btn btn-secondary text-light"><span class="fas fa-caret-left mr-2"></span>Regresar</a>
+			</div>
 
         </div>
+     
+
     </div>
 </div>
 <!-- / Contenedor de la pagina -->
 <?php include "../../../layouts/medico/footer.php";?>
 <!-- scripts -->
 <script>
-    $("#li-pacientes").addClass("active"); -
-    cargando();
-    function cargando(){
-        swal('Cargando, espere un momento por favor ... ', {
-            closeOnClickOutside: false,
-            buttons: false,
-            content: {
-                element: "img",
-                attributes: {
-                title: "cargando",
-                src: "/apps/img/cargando.gif",
-                style: "width:25px; margin-bottom:20px;"
-                },
-            },
+    $("#li-pacientes").addClass("active");  
+    cargando(); 
+    var url = '/apps/controller/paciente';
+    var data = { funcion : "ver", parametros : {'id' : '<?=($_GET['id'])?>' } };
+    var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
+    fetch(url, miInit).then(res => res.json()).catch(error =>  {
+        console.log(error);
+        swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
+    }).then(resp => {
+        if(resp.roluser == 4){
+            $("#paciente").removeClass("d-none");
+        }else if(resp.roluser == 3){
+            $("#medico").removeClass("d-none");
+        }
+        $("span[tipo=campo_bd]").each(function(){
+            var name = $(this).attr("id"), valor = resp[name];
+            $(this).text(valor);
         });
-    }
 
-    function capitalize(string){
+        setTimeout(() => {
+            swal.close();
+        }, 200);
+    });
+
+    function cargando(){
+            swal('Cargando, espere un momento por favor ... ',{
+                closeOnClickOutside: false,
+                buttons: false,
+                content: {
+                    element: "img",
+                    attributes: {
+                    title: "cargando",
+                    src: "/apps/img/cargando.gif",
+                    style: "width:25px; margin-bottom:20px;"
+                    },
+                },
+            });
+        }
+
+        function capitalize(string){
         if(string){
             string = string.toLowerCase();
             return string.charAt(0).toUpperCase() + string.slice(1);
         }
         return '';
     }
-
-    var id_paciente = "<?=($_GET['id'])?>";
-    id_paciente = id_paciente.trim();
-
-    var parametros = {
-        "id" : id_paciente
-    };
-
-    var url = '/apps/controller/paciente';
-    var data = { funcion: "ver", parametros: parametros  };
-    var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
-    fetch(url, miInit).then(res => res.json()).catch(error =>  {
-        console.log(error);
-        swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
-    }).then(resp => {
-        if(resp){
-            $("#nom_corto").text(capitalize(resp.name1)+" "+capitalize(resp.surname1));
-            $("#identificacion").val("( "+resp.tipodoc+" )"+" "+resp.numdoc);
-            $("#email").val(resp.email ? resp.email : "");
-            $("#apellidos").val(capitalize(resp.surname1)+" "+capitalize(resp.surname2));
-            $("#nombres").val(capitalize(resp.name1)+" "+capitalize(resp.name2));
-            $("#fecha").val(resp.birthdate ? resp.birthdate : '');
-            $("#sexo").val(resp.sex == 'M' ? 'Masculino' : 'Femenino' );
-            $("#eps").val(capitalize(resp.eps));
-            $("#estado").val(resp.state == 'AC' ? 'Activo' : 'Inactivo');
-            $("#telefono").val(resp.phone ? resp.phone : "");
-            $("#address").val(resp.address ? resp.address : "");
-            $("#zona").val(resp.zone == 'U' ? 'Urbana' : 'Rural' );
-            $("#ciudad").val( ( capitalize(resp.muni) ? capitalize(resp.muni) +" ( "+capitalize(resp.dpto)+" )" : '' ) );
-            $("#telefono_contact").val(resp.contact_phone ? resp.contact_phone : "");
-            $("#apellidos_contact").val(resp.contact_surnames);
-            $("#nombres_contact").val(resp.contact_names);
-            $("#ciudad_contact").val(capitalize(resp.muni_contact)+" ( "+capitalize(resp.dpto_contact)+" )");
-
-            $("#padre_apellidos").val(resp.father_surname);
-            $("#padre_nombres").val(resp.father_name);
-            $("#padre_email").val(resp.father_email);
-            $("#padre_tel").val(resp.father_phone);
-            $("#madre_apellidos").val(resp.mother_surname);
-            $("#madre_nombres").val(resp.mother_name);
-            $("#madre_email").val(resp.mother_email);
-            $("#madre_tel").val(resp.mother_phone);
-
-            setTimeout(() => {
-                swal.close();
-            }, 200); 
-        }      
-    });    
 </script>
 <!-- / scripts -->
 <?php include "../../../layouts/medico/fin.php";?>

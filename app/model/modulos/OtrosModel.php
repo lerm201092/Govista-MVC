@@ -53,9 +53,9 @@
             return $this->resp;        
         }
 
-        public function Listar_Registros( $tabla = null, $condicion = null, $offset = null ){
+        public function Listar_Registros(  $campos = null,  $tabla = null, $condicion = null, $offset = null ){
             $this->resp = array();
-            $consulta = "SELECT * FROM ".$tabla." ".Self::Condicionales($condicion)." ORDER BY id DESC ".( $offset ? "LIMIT 15 OFFSET ".$offset : "");
+            $consulta = "SELECT ".($campos ?? '*')." FROM ".$tabla." ".Self::Condicionales($condicion)." ORDER BY id DESC ".( $offset ? "LIMIT 15 OFFSET ".$offset : "");
             $stmt = $this->db ->prepare($consulta);
             try { 
                 $total = 0;
@@ -69,9 +69,9 @@
             return  $this->resp;
         }
 
-        public function Cantidad_Registros($tabla = null, $condicion = null){    
+        public function Cantidad_Registros($campos = null, $tabla = null, $condicion = null){    
             $this->resp = array();        
-            $consulta = "SELECT id FROM ".$tabla." ".Self::Condicionales($condicion);
+            $consulta = "SELECT ".($campos ?? 'id')." FROM ".$tabla." ".Self::Condicionales($condicion);
             $stmt = $this->db ->prepare($consulta);
             try { 
                 $stmt->execute();
@@ -157,7 +157,7 @@
             $salida = "";
             if($entrada){
                 foreach ($entrada as $clave => $valor) {
-                   $salida .= $clave ." = '".$valor."' AND ";
+                   $salida .= $clave ." = ".$valor." AND ";
                 }
                 $salida = " WHERE ".$salida;
                 $salida = substr($salida, 0, -4);

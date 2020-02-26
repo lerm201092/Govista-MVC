@@ -1,5 +1,18 @@
 
 
+<?php
+
+if (@!$_SESSION['gv_iduser']) {
+  header('Location:'.SERVER_FOLDER.'apps/login');
+}else{
+  if($_SESSION["gv_rol"] != 1){
+    header('Location:'.SERVER_FOLDER.'apps/login');
+  }
+}
+
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
