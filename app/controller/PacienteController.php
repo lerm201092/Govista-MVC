@@ -33,7 +33,23 @@ require '../model/ConectarDB.php';
         $resp["cant_max"]   = ceil( $DB->Cantidad_Registros( $campo, $tabla, $condicion ) / 15 );     
         $resp["pacientes"]  = $DB->Listar_Registros($campo, $tabla, $condicion , $offset);      
         return $resp;
-    }  
+    } 
+    
+    // function buscar($parametros){ 
+    //     $paciente = new PacienteModel;
+    //     $cant_reg_x_page = 15; //registros por paginas
+    //     $num_page       = $parametros["pagina"];   //numero de la pagina en la URL
+    //     $texto          = $parametros["texto"];   //numero de la pagina en la URL
+    //     $cant_pacientes = $paciente->medico_cant_busqueda($texto);  // Cantidad de pacientes de la empresa
+    //     $cant_max_page  = ceil($cant_pacientes/$cant_reg_x_page);
+
+    //     $offset = ($num_page - 1) * $cant_reg_x_page;
+    //     $pacientes["cant_max"]   = $cant_max_page;
+    //     $pacientes["pacientes"]  = $paciente->medico_buscar($offset, $texto);
+       
+    //     return $pacientes;
+    // } 
+
 
     function ver($parametros){
         $UsuarioDB = new UsuariosModel;       
@@ -64,6 +80,30 @@ require '../model/ConectarDB.php';
         $resp   = $DB->Cargar_Eps();
         return $resp;
     }
+
+    function crear($parametros){ 
+        $DB = new OtrosModel;
+        $resp = $DB->Guardar_Registros('usuarios', $parametros);
+        if($resp == "OK"){
+            $usuario = valor_x_name($parametros, 'usuario');
+            $id_usuario = $DB->Valor_Campo('id', 'usuarios', ['usuario' => "'".$usuario."'" ] );   
+            $aux[0] = array( 'name' => 'id_usuario', 'value' => $id_usuario  );
+            $aux[1] = array( 'name' => 'id_empresa', 'value' => $_SESSION['gv_idempresa']);
+            $aux[2] = array( 'name' => 'state'     , 'value' => 'AC');
+            $resp = $DB->Guardar_Registros('usuario_empresa', $aux);
+        }
+        return $resp;
+    }
+
+    function valor_x_name($entrada, $campo){
+        $salida = null;
+        foreach ($entrada as $item) {
+            if($item["name"] == $campo ){
+                return $item["value"];
+            }
+        }
+        return $salida;
+    }
     
     // function listar($parametros){ 
     //     $paciente = new PacienteModel;
@@ -78,20 +118,6 @@ require '../model/ConectarDB.php';
     //     return $resp;
     // }  
 
-    // function buscar($parametros){ 
-    //     $paciente = new PacienteModel;
-    //     $cant_reg_x_page = 15; //registros por paginas
-    //     $num_page       = $parametros["pagina"];   //numero de la pagina en la URL
-    //     $texto          = $parametros["texto"];   //numero de la pagina en la URL
-    //     $cant_pacientes = $paciente->medico_cant_busqueda($texto);  // Cantidad de pacientes de la empresa
-    //     $cant_max_page  = ceil($cant_pacientes/$cant_reg_x_page);
-
-    //     $offset = ($num_page - 1) * $cant_reg_x_page;
-    //     $pacientes["cant_max"]   = $cant_max_page;
-    //     $pacientes["pacientes"]  = $paciente->medico_buscar($offset, $texto);
-       
-    //     return $pacientes;
-    // } 
 
     // function ver($parametros){ 
     //     $paciente = new PacienteModel;

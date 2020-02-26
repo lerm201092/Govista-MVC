@@ -29,7 +29,6 @@
             $this->resp = array();
             $aux = Self::config_editar($parametros);
             $consulta = "UPDATE ".$tabla." SET".$aux["set"]." WHERE id = ".$aux["id"];
-            // return $consulta;
             $stmt = $this->db->prepare($consulta);
             try{
                 $stmt->execute();
@@ -62,6 +61,22 @@
                 $stmt->execute();
                 while ($arr = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $this->resp[] = $arr;
+                }
+            }catch(PDOException $e){
+                echo $e->getMessage();
+            }
+            return  $this->resp;
+        }
+
+        public function Valor_Campo(  $campo = null,  $tabla = null, $condicion = null ){
+            $this->resp = array();
+            $consulta = "SELECT ".($campo ?? 'id')." as campo FROM ".$tabla." ".Self::Condicionales($condicion);
+            $stmt = $this->db ->prepare($consulta);
+            try { 
+                $total = 0;
+                $stmt->execute();
+                if ($arr = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $this->resp = $arr['campo'];
                 }
             }catch(PDOException $e){
                 echo $e->getMessage();

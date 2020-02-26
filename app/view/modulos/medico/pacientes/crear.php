@@ -194,7 +194,7 @@
                         <div class="col-xl-3 mt-3">
                             <div class="mat-div is-completed">
                                 <label for="first-name" class="mat-label">Departamento</label>
-                                <select class="mat-input" required name="" id="dpto" onchange="cargar_munic('dpto', 'id_area')">
+                                <select class="mat-input" required name="" id="dpto" onchange="cargar_munic('')">
                                 </select>
                             </div>  
                         </div>
@@ -277,16 +277,6 @@
 						</div>
                         <div class="col-xl-3 mt-3">
 							<div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Rol de usuario</label>
-                                <select required class="mat-input" name="roluser" id="roluser">
-                                    <?php foreach(CONSTANTES['roles_users'] as $key=>$value): ?>
-                                        <option value="<?=($key)?>"><?=($value)?></option>
-                                    <?php endforeach ?>
-                                </select>
-							</div>
-						</div>
-                        <div class="col-xl-3 mt-3">
-							<div class="mat-div is-completed">
                                 <label for="first-name" class="mat-label">Usuario</label>
                                 <input type="text" required class="mat-input" name="usuario"/>
 							</div>
@@ -354,11 +344,8 @@
                         </div>
                         
                     </div>
-
-
-
                   
-                    
+                    <input type="hidden" name="roluser" value="4" />
                     <input type="hidden" name="state" value="AC" />
                     <input type="hidden" name="created_user" value="<?=(USERNAME)?>" /> 
 
@@ -455,7 +442,7 @@
     }
 
     function cargar_eps(){
-        var url = '/apps/controller/usuario';
+        var url = '/apps/controller/paciente';
         var data = { funcion : 'cargar_eps', parametros : { } };
         var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
         fetch(url, miInit).then(res => res.json()).catch(error =>  {
@@ -473,10 +460,11 @@
         });
     }
 
-    function cargar_munic(cb_dpto, cb_munic){
+    
+    function cargar_munic(mun){
         cargando();
         var sw = 0;
-        var dpto = $("#"+cb_dpto).val();
+        var dpto = $("#dpto").val();
         var parametros = { "dpto" : dpto };
 
         var url = '/apps/controller/paciente';
@@ -487,13 +475,35 @@
             swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
         }).then(resp => {
             var html = "<option value=''>- Escoja una opción -</option>";
-            resp.forEach(function(arr){ html += "<option value='"+arr["name"]+"'>"+arr["value"]+"</option>"; });  
-            $("#"+cb_munic).html(html); 
+            resp.forEach(function(arr){ html += "<option "+(arr["name"] == mun ? 'selected ' : '')+"value='"+arr["name"]+"'>"+arr["value"]+"</option>"; });  
+            $("#id_area").html(html); 
             setTimeout(() => {
                 swal.close();
-            }, 200); 
+            }, 200);
         });
     }
+
+    // function cargar_munic(cb_dpto, cb_munic){
+    //     cargando();
+    //     var sw = 0;
+    //     var dpto = $("#"+cb_dpto).val();
+    //     var parametros = { "dpto" : dpto };
+
+    //     var url = '/apps/controller/paciente';
+    //     var data = { funcion: "cargar_munic", parametros: parametros };
+    //     var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
+    //     fetch(url, miInit).then(res => res.json()).catch(error =>  {
+    //         console.log(error);
+    //         swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
+    //     }).then(resp => {
+    //         var html = "<option value=''>- Escoja una opción -</option>";
+    //         resp.forEach(function(arr){ html += "<option value='"+arr["name"]+"'>"+arr["value"]+"</option>"; });  
+    //         $("#"+cb_munic).html(html); 
+    //         setTimeout(() => {
+    //             swal.close();
+    //         }, 200); 
+    //     });
+    // }
 
     function cargando(){
         swal('Cargando, espere un momento por favor ... ', {
@@ -513,7 +523,7 @@
     function guardar(){      
         cargando();
         var parametros = $("#form-usuarios").serializeArray();
-        var url    = '/apps/controller/usuario';
+        var url    = '/apps/controller/paciente';
         var data   = { funcion: "crear", parametros: parametros };
         var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
         fetch(url, miInit).then(res => res.json()).catch(error =>  {
