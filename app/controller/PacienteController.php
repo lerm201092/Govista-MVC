@@ -1,6 +1,7 @@
 <?php 
 
 require '../model/modulos/UsuariosModel.php'; 
+require '../model/modulos/PacienteModel.php'; 
 require '../model/modulos/OtrosModel.php';
 require '../model/ConectarDB.php';
 
@@ -27,7 +28,7 @@ require '../model/ConectarDB.php';
 
         $campo = "u.*, concat( m.nomarea, ' - ', d.nomarea ) AS ciudad ";
         $tabla = "usuarios u left join areas m on m.id = u.id_area left join areas d on d.id = m.padre ";
-        $condicion = ( $estado == "ALL" ?  [ 'u.roluser' => '4' ] : [ 'u.roluser' => '4', 'u.state' => "'".$estado."'" ] );
+        $condicion = ( $estado == "ALL" ?  [ 'u.roluser' => '4', 'u.id_empresa' => $_SESSION['gv_idempresa']] : [ 'u.roluser' => '4', 'u.state' => "'".$estado."'", 'u.id_empresa' => $_SESSION['gv_idempresa'] ] );
 
         $offset             = ($num_page-1) * 15;
         $resp["cant_max"]   = ceil( $DB->Cantidad_Registros( $campo, $tabla, $condicion ) / 15 );     
@@ -35,20 +36,23 @@ require '../model/ConectarDB.php';
         return $resp;
     } 
     
-    // function buscar($parametros){ 
-    //     $paciente = new PacienteModel;
-    //     $cant_reg_x_page = 15; //registros por paginas
-    //     $num_page       = $parametros["pagina"];   //numero de la pagina en la URL
-    //     $texto          = $parametros["texto"];   //numero de la pagina en la URL
-    //     $cant_pacientes = $paciente->medico_cant_busqueda($texto);  // Cantidad de pacientes de la empresa
-    //     $cant_max_page  = ceil($cant_pacientes/$cant_reg_x_page);
+    function buscar($parametros){ 
+        $paciente = new PacienteModel;
+        $cant_reg_x_page = 15; //registros por paginas
+        $num_page       = $parametros["pagina"];   //numero de la pagina en la URL
+        $texto          = $parametros["texto"];   //numero de la pagina en la URL
 
-    //     $offset = ($num_page - 1) * $cant_reg_x_page;
-    //     $pacientes["cant_max"]   = $cant_max_page;
-    //     $pacientes["pacientes"]  = $paciente->medico_buscar($offset, $texto);
+        $cant_pacientes = $paciente->Cantidad_Busqueda( $texto );  // Cantidad de pacientes de la empresa
+        // return $cant_pacientes;
+
+        $cant_max_page  = ceil($cant_pacientes/$cant_reg_x_page);
+
+        $offset = ($num_page - 1) * $cant_reg_x_page;
+        $pacientes["cant_max"]   = $cant_max_page;
+        $pacientes["pacientes"]  = $paciente->medico_buscar($offset, $texto);
        
-    //     return $pacientes;
-    // } 
+        return $pacientes;
+    } 
 
 
     function ver($parametros){

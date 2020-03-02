@@ -253,8 +253,8 @@ ul#tabs-ver .nav-item .nav-link{
                         <th class="d-none d-sm-none d-md-table-cell">Identificacion</th>
                         <th>Nombres</th>
                         <th>Apellidos</th>
-                        <th class="d-none d-sm-none d-md-table-cell">Usuario</th>
                         <th class="d-none d-sm-none d-md-table-cell">Email</th>
+                        <th class="d-none d-sm-none d-md-table-cell">Estado</th>
                         <th class="d-none d-sm-none d-md-table-cell">Rol</th>
                         <th></th>
                     </thead>
@@ -385,13 +385,14 @@ ul#tabs-ver .nav-item .nav-link{
                 html+="<td>("+resp.usuarios[i].tipodoc+" ) "+resp.usuarios[i].numdoc+"</td>";
                 html+="<td id='td_nombre_"+resp.usuarios[i].id+"'>"+( resp.usuarios[i].nombre1 ?? '')+" "+(resp.usuarios[i].nombre2 ?? '')+"</td>";
                 html+="<td id='td_apellido_"+resp.usuarios[i].id+"'>"+( resp.usuarios[i].apellido1 ?? '' )+" "+( resp.usuarios[i].apellido2 ?? '' )+"</td>";
-                html+="<td id='td_usuario_"+resp.usuarios[i].id+"'>"+( resp.usuarios[i].usuario ?? '' )+"</td>";
                 html+="<td>"+( resp.usuarios[i].email ?? '' )+"</td>";
+                html+="<td id='td_est_"+resp.usuarios[i].id+"'>"+( resp.usuarios[i].state ?? '' )+"</td>";
                 html+="<td>"+( resp.usuarios[i].roluser ? rol_user(resp.usuarios[i].roluser) : '' )+"</td>";
                 html+="<td>";
                     html+="<a disabled href='/apps/rol-administrador/usuarios/ver/"+resp.usuarios[i].id+"' class='cl-azul mx-1'><i class='fas fa-eye'></i></a>";
                     html+="<a disabled href='/apps/rol-administrador/usuarios/editar/"+resp.usuarios[i].id+"' class='cl-amarillo mx-1 mr-2'><i class='fas fa-edit'></i></a>  ";
                     html+="<a disabled href='javascript:pre_cambio_contrasena("+resp.usuarios[i].id+")' class='cl-rojo mx-1 mr-2'><i class='fa fa-unlock-alt'></i></a>  ";
+                    html+=`<a id='a_est_`+resp.usuarios[i].id+`' disabled href="javascript:cambiar_estado(`+resp.usuarios[i].id+`, '`+resp.usuarios[i].state+`')" class="cl-`+(resp.usuarios[i].state == 'AC' ? 'rojo' : 'verde')+` mx-1"><i id="i_est_`+resp.usuarios[i].id+`" class="`+(resp.usuarios[i].state == 'AC' ? 'fas fa-minus-circle' : '	fas fa-power-off')+`"></i></a>`;
                 html+="</td>";
                 html+="</tr>";
             }
@@ -473,7 +474,7 @@ ul#tabs-ver .nav-item .nav-link{
 
     function cambiar_estado(id, estado){
         cargando();
-        var url = '/apps/controller/empresa';
+        var url = '/apps/controller/usuario';
         var data = { funcion : 'cambiar_estado', parametros : { 'id' : id, 'estado' : (estado == 'AC' ? 'IN' : 'AC') } };
         var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
         fetch(url, miInit).then(res => res.json()).catch(error =>  {
@@ -491,6 +492,8 @@ ul#tabs-ver .nav-item .nav-link{
             }            
         });
     }
+
+
 
     
 
@@ -554,16 +557,19 @@ ul#tabs-ver .nav-item .nav-link{
     function rol_user(rol){
         switch (rol) {
             case '1':
-                return 'Administrador';
+                return 'Admin.';
                 break;
             case '2':
-                return 'Padre de familia';
+                return 'Asesor Comercial';
                 break;
             case '3':
                 return 'Medico';
                 break;
             case '4':
                 return 'Paciente';
+                break;
+            case '5':
+                return 'Admin. Clinica';
                 break;
             default:
                 return 'Hola mundo';

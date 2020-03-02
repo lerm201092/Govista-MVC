@@ -46,7 +46,16 @@
 
     function crear($parametros){ 
         $DB = new OtrosModel;
-        $resp = $DB->Guardar_Registros('empresas', $parametros);
+        $resp = $DB->Guardar_Registros( 'empresas', $parametros["empresa"] );
+        if($resp == "OK"){
+            $nit     = valor_x_name($parametros["empresa"], 'nit');
+            $id_empresa = $DB->Valor_Campo('id', 'empresas', ['nit' => "'".$nit."'" ] );
+            array_push($parametros["usuario"], [ "name" => "id_empresa", "value" => $id_empresa ]);
+            $resp = $DB->Guardar_Registros( 'usuarios', $parametros["usuario"] );
+            if( $resp != "OK" ){
+               $x = $DB->Eliminar_Registros("empresas", $DB->Valor_Campo('id', 'empresas', ['nit' => "'".$nit."'" ] ));
+            }
+        }
         return $resp;
     }
 
@@ -67,5 +76,15 @@
         $DB     = new OtrosModel;
         $resp   = $DB->Cargar_Muni($parametros["dpto"]);
         return $resp;
+    }
+
+    function valor_x_name($entrada, $campo){
+        $salida = null;
+        foreach ($entrada as $item) {
+            if($item["name"] == $campo ){
+                return $item["value"];
+            }
+        }
+        return $salida;
     }
 ?>

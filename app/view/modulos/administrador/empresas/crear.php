@@ -145,9 +145,14 @@
       font-size: 14px;
   }
 
-  .col-xl-6{
-      padding-top: 25px;
+  .div_border{
+    margin-top: 20px;
+    border: 1px solid #c0c0c0; 
+    padding: 10px 15px 30px; 
+    border-radius: 5px;
   }
+
+
 
 </style>
 
@@ -157,81 +162,178 @@
 <?php include "../../../layouts/administrador/body.php";?>
 <!-- Contenedor de la pagina -->
 <div class="row pl-3 pr-3">
+    <div class="col-12 card px-0">
+        <div class="card-header mx-0">
+            <h5 class="mb-0">Registrar nueva empresa</h5>
+        </div>
+        <!-- INICIO DE CARD BODY -->
+        <div class="card-body"> 
+            <form id="form-empresas" action="javascript:void(0)" onsubmit="guardar()">
+                <p id="p-alert" class="d-none alert alert-danger">Debe seleccionar un paciente para poder registrar la cita.</p>
 
-<div class="col-12 card px-0">
-            <div class="card-header mx-0">
-                <h5 class="mb-0">Registrar nueva cita</h5>
-            </div>
-        <div class="card-body px-4">
-			<div class="container">    
-                <p id="p-alert" class="d-none alert alert-danger">Debe seleccionar un paciente para poder registrar la cita.</p>   
-				<form id="form-empresas" action="javascript:void(0)" onsubmit="guardar()">
-					<div class="row  px-4"> 
-                        <div class="col-xl-6">
-							<div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">NIT</label>
-                                <input type="text" required class="mat-input" name="nit" />
-							</div>
-						</div>
-						<div class="col-xl-6">
-							<div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Nombre de la empresa</label>
-                                <input type="text" required class="mat-input" name="nombre" />
-							</div>
-						</div>
-                        <div class="col-xl-6">
-							<div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Contacto</label>
-                                <input type="text" required class="mat-input" name="contacto" />
-							</div>
-						</div>
-                        <div class="col-xl-6">
-							<div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Email</label>
-                                <input type="text" required class="mat-input" name="email" />
-							</div>
-						</div>
-                        <div class="col-xl-6">
-							<div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Teléfono</label>
-                                <input type="text" required class="mat-input" name="telefono" />
-							</div>
-						</div>
-						<div class="col-xl-6">
-							<div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Dirección</label>
-                                <input type="text" required class="mat-input" name="direccion" />
-							</div>
-						</div>
-                        <div class="col-xl-6">
-                            <div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Departamento</label>
-                                <select class="mat-input" required name="" id="dpto" onchange="cargar_munic('dpto', 'id_area')">
-                                </select>
-                            </div>  
-                        </div>
-                        <div class="col-xl-6">
-                            <div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Ciudad</label>
-                                <select class="mat-input" required name="id_area" id="id_area">
-                                    <option value='x'>- Escoja una opción -</option>
-                                </select>
-                            </div>  
+
+                <!-- DIV PARA DATOS DE EMPRESAS -->   
+                <div  id="form-emp" class="row div_border"> 
+                    <div class="col-12">
+                        <h6 style="color: #777777;"><i>DATOS EMPRESA</i></h6>
+                    </div>
+                    
+                    <div class="col-xl-3">
+                        <div class="mat-div is-completed">
+                            <label for="first-name" class="mat-label">NIT</label>
+                            <input type="text" required class="mat-input" name="nit" />
                         </div>
                     </div>
+                    
+                    <div class="col-xl-6">
+                        <div class="mat-div is-completed">
+                            <label for="first-name" class="mat-label">Nombre de la empresa</label>
+                            <input type="text" required class="mat-input" name="nombre" />
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="mat-div is-completed">
+                            <label for="first-name" class="mat-label">Dirección</label>
+                            <input type="text" required class="mat-input" name="direccion" />
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="mat-div is-completed">
+                            <label for="first-name" class="mat-label">Contacto</label>
+                            <input type="text" required class="mat-input" name="contacto" />
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="mat-div is-completed">
+                            <label for="first-name" class="mat-label">Email</label>
+                            <input type="text" required class="mat-input" name="email" />
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="mat-div is-completed">
+                            <label for="first-name" class="mat-label">Teléfono</label>
+                            <input type="text" required class="mat-input" name="telefono" />
+                        </div>
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="mat-div is-completed">
+                            <label for="first-name" class="mat-label">Departamento</label>
+                            <select class="mat-input" required name="" id="dpto" onchange="cargar_munic('dpto', 'id_area')">
+                            </select>
+                        </div>  
+                    </div>
+                    <div class="col-xl-3">
+                        <div class="mat-div is-completed">
+                            <label for="first-name" class="mat-label">Ciudad</label>
+                            <select class="mat-input" required name="id_area" id="id_area">
+                                <option value='x'>- Escoja una opción -</option>
+                            </select>
+                        </div>  
+                    </div>
+                    <!-- INPUT OCULTOS -->
                     <input type="hidden" name="state" value="AC" />
                     <input type="hidden" name="addcoduser" value="<?=(USERNAME)?>" />
+                </div>	 
 
-                    <div class="row pt-4">
-						<div class="col-12 text-right">
-							<a href="/apps/rol-administrador/empresas/listado" class="btn btn-secondary text-light "><span class="fas fa-caret-left mr-2"></span>Regresar</a>
-                            <button class="btn text-light bg-morado"><i class="fas fa-save mr-2"></i>Guardar</button>                         
-						</div>				
-					</div>	
-				</form>	
-			</div>     
-		</div>
-	</div>
+
+                <!-- DIV PARA DATOS DE USUARIOS -->
+                <div id="form-usu" class="mt-4">
+                    <div class="row" style="border: 1px solid #c0c0c0;  padding: 10px 15px 30px; border-radius: 5px;"> 
+                        <div class="col-12">
+                            <h6 style="color: #777777;"><i>DATOS USUARIO ADMINISTRADOR</i></h6>
+                        </div>
+                        <div class="col-xl-3 mt-3">
+                            <div class="mat-div is-completed">
+                                <label for="first-name" class="mat-label">Tipo documento</label>
+                                <select required class="mat-input" name="tipodoc" id="tipodoc">
+                                    <?php foreach(CONSTANTES['tipo_documento'] as $key=>$value): ?>
+                                        <option value="<?=($key)?>"><?=($value)?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 mt-3">
+                            <div class="mat-div is-completed">
+                                <label for="first-name" class="mat-label">Numero documento</label>
+                                <input type="text" required class="mat-input" name="numdoc" />
+                            </div>
+                        </div>
+                        <div class="col-xl-3 mt-3">
+                            <div class="mat-div is-completed">
+                                <label for="first-name" class="mat-label">Primer nombre</label>
+                                <input type="text" required class="mat-input" name="nombre1" />
+                            </div>
+                        </div>
+                        <div class="col-xl-3 mt-3">
+                            <div class="mat-div is-completed">
+                                <label for="first-name" class="mat-label">Segundo nombre</label>
+                                <input type="text" class="mat-input" name="nombre2" />
+                            </div>
+                        </div>
+                        <div class="col-xl-3 mt-3">
+                            <div class="mat-div is-completed">
+                                <label for="first-name" class="mat-label">Primer Apellido</label>
+                                <input type="text" required class="mat-input" name="apellido1" />
+                            </div>
+                        </div>
+                        <div class="col-xl-3 mt-3">
+                            <div class="mat-div is-completed">
+                                <label for="first-name" class="mat-label">Segundo Apellido</label>
+                                <input type="text" class="mat-input" name="apellido2" />
+                            </div>
+                        </div>
+                        <div class="col-xl-3 mt-3">
+                            <div class="mat-div is-completed">
+                                <label for="first-name" class="mat-label">Email</label>
+                                <input type="text" required class="mat-input" name="email" />
+                            </div>
+                        </div>
+                        <div class="col-xl-3 mt-3">
+                            <div class="mat-div is-completed">
+                                <label for="first-name" class="mat-label">Sexo</label>
+                                <select required class="mat-input" name="sexo" id="sexo" required>
+                                    <option value="">- Escoja una opción -</option>
+                                    <option value="F">Femenino</option>
+                                    <option value="M">Masculino</option>
+                                </select>
+                            </div>
+                        </div>   
+                        <div class="col-xl-3 mt-3">
+                            <div class="mat-div is-completed">
+                                <label for="first-name" class="mat-label">Teléfono</label>
+                                <input type="text" required class="mat-input" name="telefono" />
+                            </div>
+                        </div>
+                        <div class="col-xl-3 mt-3">
+							<div class="mat-div is-completed">
+                                <label for="first-name" class="mat-label">Contraseña</label>
+                                <input type="password" id="pass1" required class="mat-input" name="password"/>
+							</div>
+						</div>
+                        <div class="col-xl-3 mt-3">
+							<div class="mat-div is-completed">
+                                <label for="first-name" class="mat-label">Confirmar Contraseña</label>
+                                <input type="password" id="pass2" required class="mat-input"/>
+							</div>
+						</div>
+                    </div>
+                    
+                    <input type="hidden" name="roluser" value="5" />
+                    <input type="hidden" name="state" value="AC" />
+                    <input type="hidden" name="created_user" value="<?=(USERNAME)?>" /> 
+                </div>	
+
+
+                <div class="row pt-4">
+                    <div class="col-12 text-right">
+                        <a href="/apps/rol-administrador/empresas/listado" class="btn btn-secondary text-light "><span class="fas fa-caret-left mr-2"></span>Regresar</a>
+                        <button class="btn text-light bg-morado"><i class="fas fa-save mr-2"></i>Guardar</button>                         
+                    </div>				
+                </div>
+
+            </form>	                
+        </div>
+    </div>
 </div>
 <!-- / Contenedor de la pagina -->
 <?php include "../../../layouts/administrador/footer.php";?>
@@ -248,7 +350,6 @@
 
   $(".mat-input").focusout(function(){
     if($(this).val() === "")
-      $(this).parent().removeClass("is-completed");
       $(this).parent().removeClass("is-active");
     })
 
@@ -305,30 +406,40 @@
         });
     }
 
-    function guardar(){      
-        cargando();
-        var parametros = $("#form-empresas").serializeArray();
-        var url    = '/apps/controller/empresa';
-        var data   = { funcion: "crear", parametros: parametros };
-        var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
-        fetch(url, miInit).then(res => res.json()).catch(error =>  {
-            console.log(error);
-            swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
-        }).then(resp => {
-            if(resp == "OK"){
-                swal('¡Registro guardado satisfactoriamente!', { closeOnClickOutside: false, buttons: false, icon : "success"});
-                setTimeout(() => { location.href = "/apps/rol-administrador/empresas/listado";  }, 3000);
-            }else{
-                const wrapper = document.createElement('p');
-                wrapper.innerHTML = Exception(resp);
-                swal({
-                    title: "GoVista",
-                    content: wrapper, 
-                    icon: "warning"
-                });
-            }
+    function guardar(){ 
+        if( $("#pass1").val() == $("#pass2").val() ){
+            cargando();
+            var form_emp = $("#form-emp *").serializeArray();
+            var form_usu = $("#form-usu *").serializeArray();
+            var parametros = { usuario : form_usu, empresa : form_emp  };
 
-        });           
+            var url    = '/apps/controller/empresa';
+            var data   = { funcion: "crear", parametros: parametros };
+            var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
+            fetch(url, miInit).then(res => res.json()).catch(error =>  {
+                console.log(error);
+                swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
+            }).then(resp => {
+                if(resp == "OK"){
+                    swal('¡Registro guardado satisfactoriamente!', { closeOnClickOutside: false, buttons: false, icon : "success"});
+                    setTimeout(() => { location.href = "/apps/rol-administrador/empresas/listado";  }, 3000);
+                }else{
+                    const wrapper = document.createElement('p');
+                    wrapper.innerHTML = Exception(resp);
+                    swal({
+                        title: "GoVista",
+                        content: wrapper, 
+                        icon: "warning"
+                    });
+                }
+
+            });  
+
+
+        }else{
+            swal("GoVista", "¡Contraseñas no coinciden!", "warning");
+        }
+         
     }
 
     function Exception(arr){

@@ -238,28 +238,12 @@
 							</div>
 						</div>
                         <div class="col-xl-3 mt-3">
-							<div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Fecha Nacimiento</label>
-                                <input type="date" required class="mat-input" name="fechanac" />
-							</div>
-						</div>
-                        <div class="col-xl-3 mt-3">
                             <div class="mat-div is-completed">
                                 <label for="first-name" class="mat-label">Sexo</label>
                                 <select required class="mat-input" name="sexo" id="sexo" required>
                                         <option value="">- Escoja una opción -</option>
                                         <option value="F">Femenino</option>
                                         <option value="M">Masculino</option>
-                                </select>
-							</div>
-						</div>  
-                        <div class="col-xl-3 mt-3">
-                            <div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Zona</label>
-                                <select required class="mat-input" name="zona" id="zona">
-                                    <?php foreach(CONSTANTES['zona'] as $key=>$value): ?>
-                                        <option value="<?=($key)?>"><?=($value)?></option>
-                                    <?php endforeach ?>
                                 </select>
 							</div>
 						</div>  
@@ -279,22 +263,22 @@
 							<div class="mat-div is-completed">
                                 <label for="first-name" class="mat-label">Rol de usuario</label>
                                 <select required class="mat-input" name="roluser" id="roluser">
-                                    <?php foreach(CONSTANTES['roles_users'] as $key=>$value): ?>
-                                        <option value="<?=($key)?>"><?=($value)?></option>
-                                    <?php endforeach ?>
+                                    <option value="">- Escoja una opción -</option>
+                                    <option value="1">Administrador</option>
+                                    <option value="5">Asesor Comercial</option>
                                 </select>
 							</div>
 						</div>
                         <div class="col-xl-3 mt-3">
 							<div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Usuario</label>
-                                <input type="text" required class="mat-input" name="usuario"/>
+                                <label for="first-name" class="mat-label">Contraseña</label>
+                                <input type="password" id="pass1" required class="mat-input" name="password"/>
 							</div>
 						</div>
                         <div class="col-xl-3 mt-3">
 							<div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Contraseña</label>
-                                <input type="password" required class="mat-input" name="password"/>
+                                <label for="first-name" class="mat-label">Confirmar Contraseña</label>
+                                <input type="password" id="pass2" required class="mat-input"/>
 							</div>
 						</div>
                     </div>
@@ -327,78 +311,12 @@
                             <button class="btn text-light bg-morado"><i class="fas fa-save mr-2"></i>Guardar</button>                         
 						</div>				
 					</div>	
-				</form>	
-
-
-                <div class="row d-none" tipo="div_filtro" id="div_paciente1">
-                        <div class="col-12">
-                            <h6 style="color: #777777;"><i>DATOS DE AFILIACIÓN</i></h6>
-                        </div>
-                        <div class="col-xl-9 mt-3">
-                            <div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Entidad promotora de salud</label>
-                                <select required class="mat-input" name="pac_id_eps" id="pac_id_eps">
-                                    <?php foreach(CONSTANTES['roles_users'] as $key=>$value): ?>
-                                        <option value="<?=($key)?>"><?=($value)?></option>
-                                    <?php endforeach ?>
-                                </select>
-                            </div>
-                        </div> 
-                        <div class="col-xl-3 mt-3">
-                            <div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Carnet</label>
-                                <input type="text" required class="mat-input" name="pac_carnet"/>
-                            </div>
-                        </div>                        
-                    </div>
-                        
-                    <div class="row d-none" tipo="div_filtro"  id="div_paciente2">
-                        <div class="col-12">
-                            <h6 style="color: #777777;"><i>DATOS DE CONTACTO</i></h6>
-                        </div>       
-                        <div class="col-xl-3 mt-3">
-                            <div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Nombres</label>
-                                <input type="text" required class="mat-input" name="pac_contact_name"/>
-                            </div>
-                        </div>  
-                        <div class="col-xl-3 mt-3">
-                            <div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Apellidos</label>
-                                <input type="text" required class="mat-input" name="pac_contact_surname"/>
-                            </div>
-                        </div>  
-                        <div class="col-xl-3 mt-3">
-                            <div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Telefono</label>
-                                <input type="text" required class="mat-input" name="pac_contact_phone"/>
-                            </div>
-                        </div>  
-                        <div class="col-xl-3 mt-3">
-                            <div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Email</label>
-                                <input type="text" required class="mat-input" name="pac_contact_email"/>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row d-none" tipo="div_filtro" id="div_medico">
-                        <div class="col-12">
-                            <h6 style="color: #777777;"><i>DATOS DE INFORMACIÓN MEDICA</i></h6>
-                        </div>
-                        <div class="col-12 mt-3">
-                            <div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Especialidad</label>
-                                <input type="text" required class="mat-input" name="med_especialidad"/>
-                            </div>
-                        </div>                        
-                    </div>
+				</form>	                
 			</div>     
 		</div>
 	</div>
 </div>
 
-<a href="#" onclick="prueba()">hola test</a>
 <!-- / Contenedor de la pagina -->
 <?php include "../../../layouts/administrador/footer.php";?>
 <!-- scripts -->
@@ -416,28 +334,6 @@
     $(".mat-input").focusout(function(){
       $(this).parent().removeClass("is-active");
     })
-
-    $("#roluser").on("change", function(){
-        var rol = parseInt($(this).val());
-        switch (rol){
-            case 1:
-                $("#datos").html( "" ).parent().removeClass("div_border") ;
-                $("#datos2").html( "" ).parent().removeClass("div_border") ;
-                break;
-            case 2:
-                $("#datos").html( "" ).parent().removeClass("div_border") ;
-                $("#datos2").html( "" ).parent().removeClass("div_border") ;
-                break;
-            case 3:
-                $("#datos").html( $("div[id=div_medico]").html() ).parent().addClass("div_border");
-                $("#datos2").html( "" ).parent().removeClass("div_border");
-                break;
-            case 4:
-                $("#datos").html( $("div[id=div_paciente1]").html() ).parent().addClass("div_border");
-                $("#datos2").html( $("div[id=div_paciente2]").html() ).parent().addClass("div_border");
-                break;              
-        }
-    });
 
     function cargar_dpto(){
         cargando();
@@ -513,32 +409,38 @@
         });
     }
 
-    function guardar(){      
-        cargando();
-        var parametros = $("#form-usuarios").serializeArray();
-        var url    = '/apps/controller/usuario';
-        var data   = { funcion: "crear", parametros: parametros };
-        var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
-        fetch(url, miInit).then(res => res.json()).catch(error =>  {
-            console.log(error);
-            swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
-        }).then(resp => {
-            if(resp=="OK"){
-                swal('¡Registro guardado satisfactoriamente!', { closeOnClickOutside: false, buttons: false, icon : "success"}); 
-                setTimeout(() => {
-                    location.href = "/apps/rol-administrador/usuarios/listado";
-                }, 3000);
-            }else{
-                const wrapper = document.createElement('p');
-                wrapper.innerHTML = Exception(resp);
-                swal({
-                    title: "GoVista",
-                    content: wrapper, 
-                    icon: "warning"
-                });
-            }
+    function guardar(){ 
+        if( $("#pass1").val() == $("#pass2").val() ){
+            cargando();
+            var parametros = $("#form-usuarios").serializeArray();
+            var url    = '/apps/controller/usuario';
+            var data   = { funcion: "crear", parametros: parametros };
+            var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
+            fetch(url, miInit).then(res => res.json()).catch(error =>  {
+                console.log(error);
+                swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
+            }).then(resp => {
+                if(resp=="OK"){
+                    swal('¡Registro guardado satisfactoriamente!', { closeOnClickOutside: false, buttons: false, icon : "success"}); 
+                    setTimeout(() => {
+                        location.href = "/apps/rol-administrador/usuarios/listado";
+                    }, 3000);
+                }else{
+                    const wrapper = document.createElement('p');
+                    wrapper.innerHTML = Exception(resp);
+                    swal({
+                        title: "GoVista",
+                        content: wrapper, 
+                        icon: "warning"
+                    });
+                }
 
-        });           
+            });  
+        }else{
+            swal("GoVista", "¡Contraseñas no coinciden!", "warning");
+        }
+
+         
     }
 
     function Exception(arr){

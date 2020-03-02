@@ -6,7 +6,6 @@
         private $empresa;
         public function __construct(){
             if(!isset($_SESSION)){ session_start(); } 
-            $this->empresa = $_SESSION['gv_empresa'];
             $this->db = ConectarDB::conexion();
             $this->resp = array();
         }
@@ -54,7 +53,7 @@
 
         public function Listar_Registros(  $campos = null,  $tabla = null, $condicion = null, $offset = null ){
             $this->resp = array();
-            $consulta = "SELECT ".($campos ?? '*')." FROM ".$tabla." ".Self::Condicionales($condicion)." ORDER BY id DESC ".( $offset ? "LIMIT 15 OFFSET ".$offset : "");
+            $consulta = "SELECT ".($campos ?? '*')." FROM ".$tabla." ".Self::Condicionales($condicion)." ORDER BY id DESC ".( $offset >= 0 ? "LIMIT 15 OFFSET ".$offset : "");
             $stmt = $this->db ->prepare($consulta);
             try { 
                 $total = 0;
@@ -186,7 +185,8 @@
             $campos = "";
             $valor  = "";
             foreach ($entrada as $item) {
-                if($item["value"]){
+                $long = strlen($item["value"]) ? strlen($item["value"]) : 0  ;
+                if( $long > 0 ){
                     if($item["name"]){
                         $campos.= " ".$item["name"].",";
                         if($item["name"] == "password"){

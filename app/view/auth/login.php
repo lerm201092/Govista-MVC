@@ -42,8 +42,8 @@
                 <form id="form-login" action="javascript:void(0)" onsubmit="autenticar()">
                     <div class="col-12">
                         <div class="form-group py-2 px-3" >
-                            <label class="mb-0" for="username" style="font-style: italic">Usuario</label>
-                            <input required type="text" id="usuario" name="usuario" style="font-style: italic" class="form-control  form-control-sm" placeholder="Ingrese su usuario">
+                            <label class="mb-0" for="username" style="font-style: italic">N°. Documento</label>
+                            <input required type="text" id="numdoc" name="numdoc" style="font-style: italic" class="form-control  form-control-sm" placeholder="Ingrese su usuario">
                         </div>
                     </div>
                     <div class="col-12">
@@ -103,7 +103,7 @@
                     $("small").addClass("d-none");
                 });
 
-                $("#usuario").blur(function(){
+                $("#numdoc").blur(function(){
                     if($(this).val().trim()!=""){
                         usuario_empresa();
                     }                    
@@ -136,16 +136,16 @@
 
             function usuario_empresa(){
                 $("span[id=id_empresa]").removeClass("d-none");
-                var usuario =  $("#usuario").val();                
-                if(usuario.trim() != ""){
-                    var parametros = { "usuario" : usuario }
+                var numdoc =  $("#numdoc").val();                
+                if(numdoc.trim() != ""){
                     var url = '/apps/controller/usuario';
-                    var data = { funcion : "usuario_empresa", parametros : { 'usuario' : usuario } };
+                    var data = { funcion : "usuario_empresa", parametros : { 'numdoc' : numdoc } };
                     var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
                     fetch(url, miInit).then(res => res.json()).catch(error =>  {
                         console.log(error);
                         swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
                     }).then(resp => {
+                        console.log()
                         var html = "<option value=''>- Escoja una opción -</option>";
                         for(var i=0; i < resp.length; i++){
                             html += "<option value = '"+resp[i].id_empresa+"'>"+resp[i].empresa+"</option>";

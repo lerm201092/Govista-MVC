@@ -73,7 +73,6 @@
                                 <th></th>
                         </thead>
                         <tbody id="tbody_pacientes">
-
                         </tbody>
                     </table>
                 </div>
@@ -171,9 +170,14 @@ $("#li-pacientes").addClass("active");
                 html+="<td>"+resp.pacientes[i].apellido1+" "+ ( resp.pacientes[i].apellido2 ?? '' ) +"</td>";
                 html+="<td class='d-none d-sm-none d-md-table-cell'>"+ ( resp.pacientes[i].ciudad ? resp.pacientes[i].ciudad.toLowerCase().capitalize(true) : '') +" </td>";
                 html+="<td class='d-none d-sm-none d-md-table-cell'>"+resp.pacientes[i].state+"</td>";
-                html+="<td class='pl-3'><a href='/apps/rol-medico/pacientes/ver/"+resp.pacientes[i].id+"' title='Ver Paciente'><i class='cl-azul fas fa-eye'></i></a><a href='/apps/rol-medico/pacientes/editar/"+resp.pacientes[i].id+"' title='Editar Paciente' class='ml-2'><i class='cl-morado fas fa-user-edit'></i></a></td>";
+                html+="<td class='pl-3'>";
+                    html+="<a href='/apps/rol-medico/pacientes/ver/"+resp.pacientes[i].id+"' title='Ver Paciente'><i class='cl-azul fas fa-eye'></i></a>"; 
+                    html+="<a href='/apps/rol-medico/pacientes/editar/"+resp.pacientes[i].id+"' title='Editar Paciente' class='ml-2'><i class='cl-morado fas fa-user-edit'></i></a>";
+                    html+=`<a id='a_est_`+resp.pacientes[i].id+`' disabled href="javascript:cambiar_estado(`+resp.pacientes[i].id+`, '`+resp.pacientes[i].state+`')" class="cl-`+(resp.pacientes[i].state == 'AC' ? 'rojo' : 'verde')+` mx-1"><i id="i_est_`+resp.pacientes[i].id+`" class="`+(resp.pacientes[i].state == 'AC' ? 'fas fa-minus-circle' : '	fas fa-power-off')+`"></i></a>`;
+                html+="</td>";
                 html+="</tr>";
             }
+            if(resp.pacientes.length == 0){  html = "<tr><td colspan='6'>No hay registros</td></tr>";  }
             $("#tbody_pacientes").html("");
             $("#tbody_pacientes").html(html);
             setTimeout(() => {
@@ -181,6 +185,29 @@ $("#li-pacientes").addClass("active");
             }, 200);
         });
     }
+
+    function cambiar_estado(id, estado){
+        cargando();
+        var url = '/apps/controller/usuario';
+        var data = { funcion : 'cambiar_estado', parametros : { 'id' : id, 'estado' : (estado == 'AC' ? 'IN' : 'AC') } };
+        var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
+        fetch(url, miInit).then(res => res.json()).catch(error =>  {
+            console.log(error);
+            swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
+        }).then(resp => {
+            if(resp == 'OK'){
+                $("#i_est_"+id).removeClass().addClass(estado == 'AC' ? 'fas fa-power-off' : 'fas fa-minus-circle');
+                $("#a_est_"+id).removeClass('cl-verde').removeClass('cl-rojo').addClass(estado == 'AC' ? 'cl-verde' : 'cl-rojo').attr("href", "javascript:cambiar_estado("+id+", '"+(estado == 'AC' ? 'IN' : 'AC')+"')");
+                $("#td_est_"+id).text(estado == 'AC' ? 'IN' : 'AC');
+               
+                swal('', '¡Registro actualizado satisfactoriamente!', "success"); 
+            }else{
+                alert("Error");
+            }            
+        });
+    }
+
+
 
     function buscar_pacientes(pagina){
         var texto = $("#bus_paciente").val();
@@ -221,14 +248,17 @@ $("#li-pacientes").addClass("active");
             for(var i=0; i < resp.pacientes.length; i++){
                 html+="<tr>";
                 html+="<td class='d-none d-sm-none d-md-table-cell'>( "+resp.pacientes[i].tipodoc+" ) "+resp.pacientes[i].numdoc+"</td>";
-                html+="<td>"+resp.pacientes[i].name1+" "+ ( resp.pacientes[i].name2 ? resp.pacientes[i].name2 : '' )+"</td>";
-                html+="<td>"+resp.pacientes[i].surname1+" "+ ( resp.pacientes[i].surname2 ? resp.pacientes[i].surname2 : '' ) +"</td>";
-                html+="<td class='d-none d-sm-none d-md-table-cell'>"+ ( resp.pacientes[i].munic ?  resp.pacientes[i].munic+" ( "+resp.pacientes[i].dpto+" )"  : '') +" </td>";
-                html+="<td class='d-none d-sm-none d-md-table-cell'>"+resp.pacientes[i].state+"</td>";
-                html+="<td class='pl-3'><a href='/apps/rol-medico/pacientes/ver/"+resp.pacientes[i].id+"' title='Ver Paciente'><i class='cl-azul fas fa-eye'></i></a><a href='/apps/rol-medico/pacientes/editar/"+resp.pacientes[i].id+"' title='Editar Paciente' class='ml-2'><i class='cl-morado fas fa-user-edit'></i></a></td>";
+                html+="<td>"+resp.pacientes[i].nombre1+" "+ ( resp.pacientes[i].nombre2 ?? '' )+"</td>";
+                html+="<td>"+resp.pacientes[i].apellido1+" "+ ( resp.pacientes[i].apellido2 ?? '' ) +"</td>";
+                html+="<td class='d-none d-sm-none d-md-table-cell'>"+ ( resp.pacientes[i].ciudad ? resp.pacientes[i].ciudad.toLowerCase().capitalize(true) : '') +" </td>";
+                html+="<td id='td_est_"+resp.pacientes[i].id+"' class='d-none d-sm-none d-md-table-cell'>"+resp.pacientes[i].state+"</td>";
+                html+="<td class='pl-3'>";
+                    html+="<a href='/apps/rol-medico/pacientes/ver/"+resp.pacientes[i].id+"' title='Ver Paciente'><i class='cl-azul fas fa-eye'></i></a>"; 
+                    html+="<a href='/apps/rol-medico/pacientes/editar/"+resp.pacientes[i].id+"' title='Editar Paciente' class='ml-2'><i class='cl-morado fas fa-user-edit'></i></a>";
+                    html+=`<a id='a_est_`+resp.pacientes[i].id+`' disabled href="javascript:cambiar_estado(`+resp.pacientes[i].id+`, '`+resp.pacientes[i].state+`')" class="cl-`+(resp.pacientes[i].state == 'AC' ? 'rojo' : 'verde')+` mx-1"><i id="i_est_`+resp.pacientes[i].id+`" class="`+(resp.pacientes[i].state == 'AC' ? 'fas fa-minus-circle' : '	fas fa-power-off')+`"></i></a>`;
+                html+="</td>";
                 html+="</tr>";
             }
-
             if(resp.pacientes.length == 0){  html = "<tr><td colspan='6'>No hay registros</td></tr>";  }
             $("#tbody_pacientes").html("");
             $("#tbody_pacientes").html(html);

@@ -23,7 +23,7 @@
     function usuario_empresa($parametros){ 
         $resp       = array();
         $UsuarioDB  = new UsuariosModel;
-        $resp       = $UsuarioDB->Usuario_Empresa( [ 'u.usuario' => $parametros["usuario"], 'ue.state' => 'AC' ] );
+        $resp       = $UsuarioDB->Usuario_Empresa( [ 'u.numdoc' => $parametros["numdoc"] , 'u.state' => 'AC', 'e.state' => 'AC' ] );
         // Retornamos Array de BD
         return      $resp;
     }  
@@ -49,8 +49,8 @@
         $DB                 = new OtrosModel;
         $num_page           = $parametros["pagina"];
         $offset             = ($num_page-1) * 15;
-        $resp["cant_max"]   = ceil( $DB->Cantidad_Registros( null, 'usuarios' ) / 15 );     
-        $resp["usuarios"]   = $DB->Listar_Registros(null, 'usuarios', null, $offset);             
+        $resp["cant_max"]   = ceil( $DB->Cantidad_Registros( null, 'usuarios', ['id_empresa' => $_SESSION['gv_idempresa']] ) / 15 );     
+        $resp["usuarios"]   = $DB->Listar_Registros(null, 'usuarios', ['id_empresa' => $_SESSION['gv_idempresa']], $offset);             
         return $resp;
     }  
 
@@ -129,6 +129,14 @@
         $resp = $DB->Eliminar_Registros('usuario_empresa', $parametros["id"]);
         return $resp;
     }
+
+    function cambiar_estado($parametros){ 
+        $UsuarioDB = new UsuariosModel;
+        $id     = $parametros["id"];
+        $estado = $parametros["estado"];
+        $resp = $UsuarioDB->Cambiar_Estado($id, $estado);
+        return $resp;
+    }   
     
     // function listar($parametros){ 
     //     $usuario = new UsuarioModel;

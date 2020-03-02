@@ -36,6 +36,18 @@
                     "item8"  => $BD->Cantidad_Registros(null, 'citas', [ 'state' => "'AC'" ] )  
                 );  
             break;
+            case '5':
+                $resp = array(
+                    "item1"  => $BD->Cantidad_Registros(null, 'usuarios',               [ 'roluser' => '3', 'id_empresa' => $_SESSION['gv_idempresa'] ]                         ),
+                    "item2"  => $BD->Cantidad_Registros(null, 'usuarios',               [ 'roluser' => '3', 'id_empresa' => $_SESSION['gv_idempresa'] , 'state' => "'AC'"  ]    ),
+                    "item3"  => $BD->Cantidad_Registros(null, 'usuarios',               [ 'roluser' => '4', 'id_empresa' => $_SESSION['gv_idempresa'] ]                         ),        
+                    "item4"  => $BD->Cantidad_Registros(null, 'usuarios',               [ 'roluser' => '4', 'id_empresa' => $_SESSION['gv_idempresa'] , 'state' => "'AC'" ]     ),  
+                    "item5"  => $BD->Cantidad_Registros(null, 'citas',                  [ 'id_empresa' => $_SESSION['gv_idempresa'] ]                                           ),  
+                    "item6"  => $BD->Cantidad_Registros(null, 'citas',                  [ 'id_empresa' => $_SESSION['gv_idempresa'] , 'state' => "'AC'" ]                       ),     
+                    "item7"  => $BD->Cantidad_Registros(null, 'history_exercises',      [ 'id_empresa' => $_SESSION['gv_idempresa'] ]                                           ),
+                    "item8"  => $BD->Cantidad_Registros(null, 'history_exercises',      [ 'id_empresa' => $_SESSION['gv_idempresa'] , 'status' => "'AC'"  ]                                           )  
+                );  
+            break;
             case '3':
                 $cond1 = [ 'state' => "'AC'", 'id_medico' => $_SESSION['gv_iduser'], 'id_empresa' => $_SESSION['gv_idempresa'] ] ;
                 $cond2 = [ 'u.roluser' => '4', 'u.id' => 'ue.id_usuario', 'ue.id_empresa' => $_SESSION['gv_idempresa'] ];

@@ -238,28 +238,12 @@
 							</div>
 						</div>
                         <div class="col-xl-3 mt-3">
-							<div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Fecha Nacimiento</label>
-                                <input type="date" required class="mat-input" name="fechanac" />
-							</div>
-						</div>
-                        <div class="col-xl-3 mt-3">
                             <div class="mat-div is-completed">
                                 <label for="first-name" class="mat-label">Sexo</label>
                                 <select required class="mat-input" name="sexo" id="sexo" required>
                                         <option value="">- Escoja una opción -</option>
                                         <option value="F">Femenino</option>
                                         <option value="M">Masculino</option>
-                                </select>
-							</div>
-						</div>  
-                        <div class="col-xl-3 mt-3">
-                            <div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Zona</label>
-                                <select required class="mat-input" name="zona" id="zona">
-                                    <?php foreach(CONSTANTES['zona'] as $key=>$value): ?>
-                                        <option value="<?=($key)?>"><?=($value)?></option>
-                                    <?php endforeach ?>
                                 </select>
 							</div>
 						</div>  
@@ -279,16 +263,10 @@
 							<div class="mat-div is-completed">
                                 <label for="first-name" class="mat-label">Rol de usuario</label>
                                 <select required class="mat-input" name="roluser" id="roluser">
-                                    <?php foreach(CONSTANTES['roles_users'] as $key=>$value): ?>
-                                        <option value="<?=($key)?>"><?=($value)?></option>
-                                    <?php endforeach ?>
+                                    <option value="">- Escoja una opción -</option>
+                                    <option value="1">Administrador</option>
+                                    <option value="5">Asesor Comercial</option>
                                 </select>
-							</div>
-						</div>
-                        <div class="col-xl-3 mt-3">
-							<div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Usuario</label>
-                                <input type="text" required class="mat-input" name="usuario"/>
 							</div>
 						</div>
                     </div>
@@ -321,69 +299,8 @@
                             <button class="btn text-light bg-morado"><i class="fas fa-save mr-2"></i>Guardar</button>                         
 						</div>				
 					</div>	
-				</form>	
+				</form>	                      
 
-
-                <div class="row d-none" tipo="div_filtro" id="div_paciente1">
-                        <div class="col-12">
-                            <h6 style="color: #777777;"><i>DATOS DE AFILIACIÓN</i></h6>
-                        </div>
-                        <div class="col-xl-9 mt-3">
-                            <div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Entidad promotora de salud</label>
-                                <select required class="mat-input" name="pac_id_eps" id="pac_id_eps">
-                                </select>
-                            </div>
-                        </div> 
-                        <div class="col-xl-3 mt-3">
-                            <div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Carnet</label>
-                                <input type="text" required class="mat-input" name="pac_carnet"/>
-                            </div>
-                        </div>                        
-                    </div>
-                        
-                    <div class="row d-none" tipo="div_filtro"  id="div_paciente2">
-                        <div class="col-12">
-                            <h6 style="color: #777777;"><i>DATOS DE CONTACTO</i></h6>
-                        </div>       
-                        <div class="col-xl-3 mt-3">
-                            <div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Nombres</label>
-                                <input type="text" required class="mat-input" name="pac_contact_name"/>
-                            </div>
-                        </div>  
-                        <div class="col-xl-3 mt-3">
-                            <div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Apellidos</label>
-                                <input type="text" required class="mat-input" name="pac_contact_surname"/>
-                            </div>
-                        </div>  
-                        <div class="col-xl-3 mt-3">
-                            <div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Telefono</label>
-                                <input type="text" required class="mat-input" name="pac_contact_phone"/>
-                            </div>
-                        </div>  
-                        <div class="col-xl-3 mt-3">
-                            <div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Email</label>
-                                <input type="text" required class="mat-input" name="pac_contact_email"/>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row d-none" tipo="div_filtro" id="div_medico">
-                        <div class="col-12">
-                            <h6 style="color: #777777;"><i>DATOS DE INFORMACIÓN MEDICA</i></h6>
-                        </div>
-                        <div class="col-12 mt-3">
-                            <div class="mat-div is-completed">
-                                <label for="first-name" class="mat-label">Especialidad</label>
-                                <input type="text" required class="mat-input" name="med_especialidad"/>
-                            </div>
-                        </div>                        
-                    </div>
 			</div>     
 		</div>
 	</div>

@@ -14,6 +14,20 @@ RewriteRule ^apps/login$ app/view/auth/login.php
 RewriteRule ^apps/logout$ app/controller/auth/logout.php
 
 RewriteRule ^apps/rol-medico/estadisticas/resumen$      app/view/modulos/medico/resumen.php
+RewriteRule ^apps/rol-clinica/estadisticas/resumen$      app/view/modulos/clinica/resumen.php
+RewriteRule ^apps/rol-asesor/estadisticas/resumen$      app/view/modulos/asesor/resumen.php
+
+
+RewriteRule ^apps/rol-clinica/usuarios/listado$      app/view/modulos/clinica/usuarios/listado.php
+RewriteRule ^apps/rol-clinica/usuarios/nuevo$      app/view/modulos/clinica/usuarios/crear.php
+RewriteRule ^apps/rol-clinica/usuarios/ver/([0-9]+)$    app/view/modulos/clinica/usuarios/ver.php?id=$1
+RewriteRule ^apps/rol-clinica/usuarios/editar/([0-9]+)$    app/view/modulos/clinica/usuarios/editar.php?id=$1
+
+RewriteRule ^apps/rol-asesor/citas/listado$      app/view/modulos/asesor/citas/listado.php
+RewriteRule ^apps/rol-asesor/historias/ver$      app/view/modulos/asesor/historias/ver.php
+RewriteRule ^apps/rol-asesor/ejercicios/listado$      app/view/modulos/asesor/ejercicios/listado.php
+RewriteRule ^apps/rol-asesor/ejercicios/play/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)/([a-zA-Z0-9_-]+)$   app/view/modulos/asesor/ejercicios/play.php?id=$1&id_exercise=$2&duration=$3&size=$4&idhis=$5
+
 
 RewriteRule ^apps/rol-medico/pacientes/listado$   app/view/modulos/medico/pacientes/listado.php
 RewriteRule ^apps/rol-medico/pacientes/nuevo$   app/view/modulos/medico/pacientes/crear.php

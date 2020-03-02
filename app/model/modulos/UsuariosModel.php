@@ -8,14 +8,24 @@
             $this->resp = array();
         }
 
+        public function Cambiar_Estado($id, $estado){
+            $this->resp = array();
+            $consulta = "UPDATE usuarios SET state = '".$estado."' WHERE id = ".$id;
+            $stmt = $this->db->prepare($consulta);
+            if($stmt->execute()){
+                $this->resp = "OK";
+            }
+            return $this->resp;         
+        }
+
+
         
         public function Usuario_Empresa($condicion = null, $offset = null){
-            $consulta = "SELECT u.*, ue.id as registro, e.id as id_empresa, e.nit as nit, e.nombre as empresa 
-                        FROM usuario_empresa ue
-                            LEFT JOIN usuarios AS u ON u.id = ue.id_usuario
-                            LEFT JOIN empresas AS e ON e.id = ue.id_empresa "
+            $consulta = "SELECT e.id as id_empresa, e.nombre as empresa 
+                        FROM usuarios u 
+                            LEFT JOIN empresas e ON e.id = u.id_empresa "
                         .($condicion ? Self::Condicionales($condicion)              : '' )
-                        ."  ORDER BY id DESC ".( $offset   ? " LIMIT 15 OFFSET ".$offset : '' ); 
+                        ."  ORDER BY empresa DESC ".( $offset   ? " LIMIT 15 OFFSET ".$offset : '' ); 
                         // return $consulta;
             $stmt = $this->db->prepare($consulta);
             $stmt->execute();
@@ -41,7 +51,7 @@
         }
 
         public function Autenticar($para){                
-            $consulta = "SELECT id, nombre1, apellido1, roluser, fechapago, password FROM usuarios WHERE usuario = '".$para["usuario"]."'";
+            $consulta = "SELECT id, nombre1, apellido1, roluser, fechapago, password FROM usuarios WHERE numdoc = '".$para["numdoc"]."' AND id_empresa = '".$para["id_empresa"]."'";
             $stmt = $this->db->prepare($consulta);
             $stmt->execute();
             while ($arr = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -54,7 +64,6 @@
                     //Asignacion de variables de sesion
                     session_start();
                     $_SESSION["gv_iduser"]        = $arr["id"];
-                    $_SESSION["gv_usuario"]       = $para["usuario"];
                     $_SESSION["gv_idempresa"]     = $para["id_empresa"];
                     $_SESSION["gv_empresa"]       = $para["empresa"];
                     $_SESSION["gv_nombre"]        = $arr["nombre1"]." ".$arr["apellido1"];
@@ -126,6 +135,10 @@
                 $salida = "/apps/rol-paciente/estadisticas/resumen";
             }else if($entrada == 1){
                 $salida = "/apps/rol-administrador/estadisticas/resumen";
+            }else if($entrada == 5){
+                $salida = "/apps/rol-clinica/estadisticas/resumen";
+            }else if($entrada == 2){
+                $salida = "/apps/rol-asesor/estadisticas/resumen";
             }
             return $salida;
         }
