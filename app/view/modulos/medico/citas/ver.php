@@ -170,10 +170,10 @@
         swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
     }).then(resp => {
         $("#id_paciente").text("( "+resp.tipodoc+" ) "+resp.numdoc);
-        $("#nombre_paciente").text(capitalize(resp.name1)+" "+capitalize(resp.surname1));
-        $("#telefono_paciente").text(resp.phone);
-        $("#motivo_cita").text(resp.title);
-        $("#descripcion_cita").text(resp.body);
+        $("#nombre_paciente").text( capitalize(resp.nombre1)+(resp.nombre2 ? ' '+capitalize(resp.nombre2)+' ' : ' ')+capitalize(resp.apellido1)+(resp.apellido2 ? ' '+capitalize(resp.apellido2) : '') );
+        $("#telefono_paciente").text(resp.telefono);
+        $("#motivo_cita").text(resp.resumen);
+        $("#descripcion_cita").text(resp.descripcion);
         $("#fecha_cita").text(resp.start);
         setTimeout(() => {
             swal.close();

@@ -168,7 +168,7 @@
 							<div class="mat-div is-completed">
                                 <label for="first-name" class="mat-label">Paciente</label>
                                 <input type="text" required disabled class="mat-input" id="paciente" name="paciente" style="width:80%"/>
-                                <input type="hidden" required name="id_patient" />
+                                <input type="hidden" required name="id_paciente" />
                                 <a style="font-size: 18px; float:right; cursor:pointer; position: relative; top: -5px;" class="cl-azul" title="Buscar Paciente" onclick="modal()"><span class="fa fa-search mr-1"></span></a>
 							</div>
 						</div>
@@ -181,13 +181,13 @@
 						<div class="col-xl-6 pt-4">
 							<div class="mat-div is-completed">
                                 <label for="first-name" class="mat-label">Motivo de consulta</label>
-                                <textarea required name="title" id="title" cols="54" rows="3" style="rezise:none" class="mat-input"></textarea>
+                                <textarea required name="resumen" id="resumen" cols="54" rows="3" style="rezise:none" class="mat-input"></textarea>
 							</div>
 						</div>                
 						<div class="col-xl-6 pt-4">
 							<div class="mat-div is-completed">
                                 <label for="first-name" class="mat-label">Descripción de consulta </label>
-                                <textarea required name="body" id="body" cols="54" rows="3" style="rezise:none" class="mat-input"></textarea>
+                                <textarea required name="descripcion" id="descripcion" cols="54" rows="3" style="rezise:none" class="mat-input"></textarea>
 							</div>
 						</div>                
 
@@ -227,10 +227,10 @@
 						</div>				
 					</div>	
 
-                    <input type="hidden" name="created_user" value="<?=(USERNAME)?>" />
-                    <input type="hidden" name="id_empresa" value="<?=(ID_EMPRESA)?>" />
-                    <input type="hidden" name="updated_user" value="<?=(USERNAME)?>" />
-                    <input type="hidden" name="id_medico" value="<?=($_SESSION["gv_id_medico"])?>" />
+                    <input type="hidden" name="created_user"    value="<?=(USERNAME)?>" />
+                    <input type="hidden" name="id_empresa"      value="<?=(ID_EMPRESA)?>" />
+                    <input type="hidden" name="updated_user"    value="<?=(USERNAME)?>" />
+                    <input type="hidden" name="id_medico"       value="<?=(USERNAME)?>" />
 				</form>	
 			</div>     
 		</div>
@@ -387,7 +387,7 @@
             }
             for(var i=0; i < resp.pacientes.length; i++){
 
-                var nombre = resp.pacientes[i].name1+(resp.pacientes[i].name2 ? ' '+resp.pacientes[i].name2 : '')+" "+resp.pacientes[i].surname1+(resp.pacientes[i].surname2 ? ' '+resp.pacientes[i].surname2 : '');
+                var nombre = resp.pacientes[i].nombre1+(resp.pacientes[i].nombre2 ? ' '+resp.pacientes[i].nombre2 : '')+" "+resp.pacientes[i].apellido1+(resp.pacientes[i].apellido2 ? ' '+resp.pacientes[i].apellido2 : '');
                 var doc    = "( "+resp.pacientes[i].tipodoc+" ) "+resp.pacientes[i].numdoc;
                 var id     = resp.pacientes[i].id;
 
@@ -412,17 +412,16 @@
         var nombre = $("#tdname_"+id).text();
         var doc = $("#tddoc_"+id).text();
         $("#paciente").val(doc+" - "+nombre);
-        $("input[name=id_patient]").val(id);
+        $("input[name=id_paciente]").val(id);
         $("#exampleModal").modal("hide");
     }
 
 
 
-    function guardar(){
-        
+    function guardar(){        
         var sw = 0;
         var parametros = $("#form-citas").serializeArray();
-        var id_patient = $("input[name=id_patient]").val(), id_patient = id_patient.trim();
+        var id_patient = $("input[name=id_paciente]").val(), id_patient = id_patient.trim();
         var start      = $("input[name=start]").val(), start = start.trim();
         if(id_patient != ""){
             if( start != "" ){
@@ -434,10 +433,20 @@
                     console.log(error);
                     swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
                 }).then(resp => {
-                    swal("GoVista", "Cita generada satisfactoriamente!", "success");
-                    setTimeout(() => {
-                        location.href = "/apps/rol-medico/citas/listado";
-                    }, 3000);
+                    if(resp=="OK"){
+                        swal('¡Registro guardado satisfactoriamente!', { closeOnClickOutside: false, buttons: false, icon : "success"}); 
+                        setTimeout(() => {
+                            location.href = "/apps/rol-medico/citas/listado";
+                        }, 3000);
+                    }else{
+                        const wrapper = document.createElement('p');
+                        wrapper.innerHTML = Exception(resp);
+                        swal({
+                            title: "GoVista",
+                            content: wrapper, 
+                            icon: "warning"
+                        });
+                    }
                 });
             }else{
                 $("#p-alert-start").removeClass("d-none");
@@ -455,6 +464,34 @@
             }, 5000);            
         }
     }
+
+
+    function Exception(arr){
+        if( arr["errorInfo"] ){
+            if( arr["errorInfo"][0] == '23000' ){
+                console.log();
+                var array = TextoComillas(arr["errorInfo"][2]);
+                var campo = array[1], valor = array[0];
+                var mensaje = "<p>¡Advertencia, El campo <b><i>'"+campo+"'</i></b> con valor <b><i>'"+valor+"'</i></b> ya se encuentra registrado.!</p>";
+                return mensaje;
+            }
+        }
+        return "¡Se ha generado un error en el servidor, por favor contacte al administrador!";
+    }
+
+    function TextoComillas(texto) {
+        const regex = /[^'"\\]*(?:\\.[^'"\\]*)*(["'])([^"'\\]*(?:(?:(?!\1)["']|\\.)[^"'\\]*)*)\1/gy;
+        var   grupo,
+            resultado = [];
+        
+        while ((grupo = regex.exec(texto)) !== null) {
+            //el grupo 1 contiene las comillas utilizadas
+            //el grupo 2 es el texto dentro de éstas
+            resultado.push(grupo[2]);
+        }
+        return resultado;
+    }
+
 </script>
 <!-- / scripts -->
 <?php include "../../../layouts/medico/fin.php";?>

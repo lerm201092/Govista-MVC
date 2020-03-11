@@ -51,9 +51,10 @@
             return $this->resp;        
         }
 
-        public function Listar_Registros(  $campos = null,  $tabla = null, $condicion = null, $offset = null ){
+        public function Listar_Registros(  $campos = null,  $tabla = null, $condicion = null, $offset = null, $order = null ){
             $this->resp = array();
-            $consulta = "SELECT ".($campos ?? '*')." FROM ".$tabla." ".Self::Condicionales($condicion)." ORDER BY id DESC ".( $offset >= 0 ? "LIMIT 15 OFFSET ".$offset : "");
+            $consulta = "SELECT ".($campos ?? '*')." FROM ".$tabla." ".Self::Condicionales($condicion)." ORDER BY ".( $order ? $order : 'id DESC' )." ".( $offset >= 0 ? "LIMIT 15 OFFSET ".$offset : "");
+        //    return $consulta;
             $stmt = $this->db ->prepare($consulta);
             try { 
                 $total = 0;
@@ -85,7 +86,8 @@
 
         public function Cantidad_Registros($campos = null, $tabla = null, $condicion = null){    
             $this->resp = array();        
-            $consulta = "SELECT ".($campos ?? 'id')." FROM ".$tabla." ".Self::Condicionales($condicion);
+            $consulta = "SELECT ".($campos ? $campos : 'id')." FROM ".$tabla." ".Self::Condicionales($condicion);
+            // return $consulta;
             $stmt = $this->db ->prepare($consulta);
             try { 
                 $stmt->execute();

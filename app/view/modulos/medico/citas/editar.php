@@ -167,7 +167,7 @@
 							<div class="mat-div is-completed">
                                 <label for="first-name" class="mat-label">Paciente</label>
                                 <input type="text" required disabled class="mat-input" id="paciente" name="paciente" style="width:80%"/>
-                                <input type="hidden" required name="id_patient" />
+                                <input type="hidden" required name="id_paciente" />
                                 <a style="font-size: 18px; float:right; cursor:pointer; position: relative; top: -5px;" class="" title="Buscar Paciente"><span class="fas fa-lock mr-1"></span></a>
 							</div>
 						</div>
@@ -180,13 +180,13 @@
 						<div class="col-xl-6 pt-4">
 							<div class="mat-div is-completed">
                                 <label for="first-name" class="mat-label">Motivo de consulta</label>
-                                <textarea disabled required name="title" id="title" cols="54" rows="3" style="rezise:none" class="mat-input"></textarea>
+                                <textarea disabled required name="resumen" id="title" cols="54" rows="3" style="rezise:none" class="mat-input"></textarea>
 							</div>
 						</div>                
 						<div class="col-xl-6 pt-4">
 							<div class="mat-div is-completed">
                                 <label for="first-name" class="mat-label">Descripción de consulta </label>
-                                <textarea disabled required name="body" id="body" cols="54" rows="3" style="rezise:none" class="mat-input"></textarea>
+                                <textarea disabled required name="descripcion" id="body" cols="54" rows="3" style="rezise:none" class="mat-input"></textarea>
 							</div>
                         </div>     
                     </div>
@@ -230,7 +230,7 @@
                         </div>	
                         <input type="hidden" name="id" value="<?=($_GET['id'])?>" />
                         <input type="hidden" name="updated_user" value="<?=(USERNAME)?>" />
-                        <input type="hidden" name="id_medico" value="<?=($_SESSION["gv_id_medico"])?>" />
+                        <input type="hidden" name="id_medico" value="<?=(USERNAME)?>" />
                     </div> 
 				</form>	
 			    
@@ -347,17 +347,17 @@
         "id" :  "<?=($_GET['id'])?>"
     }
     var url = '/apps/controller/citas';
-    var data = { funcion : 'pre_editar', parametros : parametros };
+    var data = { funcion : 'ver', parametros : parametros };
     var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
     fetch(url, miInit).then(res => res.json()).catch(error =>  {
         console.log(error);
         swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
     }).then(resp => {
         console.log(resp);
-        $("#paciente").val("("+resp.tipodoc+")"+" "+resp.numdoc+" - "+resp.name1+(resp.name2 ? ' '+resp.name2+' ' : ' ')+resp.surname1+(resp.surname2 ? ' '+resp.surname2+' ' : ' '));
+        $("#paciente").val("("+resp.tipodoc+")"+" "+resp.numdoc+" - "+resp.nombre1+(resp.nombre2 ? ' '+resp.nombre2+' ' : ' ')+resp.apellido1+(resp.apellido2 ? ' '+resp.apellido2+' ' : ' '));
         $("input[name=start]").val(resp.start.replace('-', '/').replace('-', '/'));
-        $("textarea[name=body]").val(resp.body);
-        $("textarea[name=title]").val(resp.title);
+        $("textarea[name=descripcion]").val(resp.descripcion);
+        $("textarea[name=resumen]").val(resp.resumen);
 
     });
 

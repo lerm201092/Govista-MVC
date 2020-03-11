@@ -1,6 +1,7 @@
 <?php 
 
     require '../model/modulos/CitaModel.php';
+    require '../model/modulos/OtrosModel.php';
     require '../model/ConectarDB.php';
     header('Access-Control-Allow-Origin: *');
     header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
@@ -23,50 +24,54 @@
         $resp = array();
         $cant_reg_x_page = 15; //registros por paginas
         $num_page       = $parametros["pagina"];   //numero de la pagina en la URL
-        $rol = $_SESSION["gv_rol_user"]; // 3: Medico / 4: Paciente / 1: Administrador
+        $rol = $_SESSION["gv_rol"]; // 3: Medico / 4: Paciente / 1: Administrador
 
         if($rol == 3){
-            $cant_citas = $cita->medico_cant('AC');  // Cantidad de pacientes de la empresa
-            $cant_max_page  = ceil($cant_citas/$cant_reg_x_page); //cantidad maxima de paginaciones posibles    
-            $offset = ($num_page-1) * $cant_reg_x_page;
-            $resp["cant_max"]  = $cant_max_page;
-            $resp["citas"]   = $cita->medico_listar($offset); 
+        
+            $DB                 = new OtrosModel;
+            $num_page           = $parametros["pagina"];
+            $estado             = $parametros["estado"];    
+            $offset             = ($num_page-1) * 15;
+
+            $campos = "c.start, c.id as cita_id, p.tipodoc, p.numdoc, p.nombre1, p.nombre2, p.apellido1, p.apellido2   ";
+            $tabla  = "citas c LEFT JOIN usuarios p ON p.id = c.id_paciente LEFT JOIN usuarios m ON m.id = c.id_medico ";
+            $condiciones = ['c.id_empresa' => $_SESSION['gv_idempresa'], 'c.id_medico' => $_SESSION['gv_iduser'], 'c.state' => "'AC'" ];
+            $order = "p.nombre1 ASC";
+
+            $cant = $DB->Cantidad_Registros( 'c.id' , $tabla , $condiciones );
+
+            $resp["cant_max"]   = ceil(  $cant / 15    );     
+
+            $resp["citas"]      = $DB->Listar_Registros(      $campos , $tabla , $condiciones , $offset, $order  );      
+        
         }else if( $rol == 4 ){
-            $cant_citas = $cita->paciente_cant('AC');  // Cantidad de pacientes de la empresa
-            $cant_max_page  = ceil($cant_citas/$cant_reg_x_page); //cantidad maxima de paginaciones posibles    
-            $offset = ($num_page-1) * $cant_reg_x_page;
-            $resp["cant_max"]  = $cant_max_page;
-            $resp["citas"]   = $cita->paciente_listar($offset); 
-        }
-
-
-            
+        
+            $DB                 = new OtrosModel;
+            $num_page           = $parametros["pagina"];
+            $estado             = $parametros["estado"];    
+            $offset             = ($num_page-1) * 15;
+            $resp["cant_max"]   = ceil( $DB->Cantidad_Registros( null, 'citas', ['id_empresa' => $_SESSION['gv_idempresa'], 'id_paciente' => $_SESSION['gv_iduser'] ] ) / 15 );     
+            $resp["citas"]      = $DB->Listar_Registros(null,'citas', ['id_empresa' => $_SESSION['gv_idempresa'], 'id_paciente' => $_SESSION['gv_iduser'], 'state' ] , $offset);      
+        
+        }            
         return $resp;
     }  
 
     function crear($parametros){ 
-        $cita = new CitaModel;
-        $resp = $cita->crear($parametros);
-        return $resp;
-    }
-
-    function pre_editar($parametros){ 
-        $cita = new CitaModel;
-        $id = $parametros["id"];
-        $resp = $cita->pre_editar($id);
-        return $resp;
-    }
-
-
-    function editar($parametros){
-        $cita = new CitaModel;
-        $resp = $cita->editar($parametros);
+        $DB = new OtrosModel;
+        $resp = $DB->Guardar_Registros('citas', $parametros);
         return $resp;
     }
 
     function ver($parametros){
         $cita = new CitaModel;
         $resp = $cita->ver($parametros["id"]);
+        return $resp;
+    }
+
+    function editar($parametros){ 
+        $DB = new OtrosModel;
+        $resp = $DB->Editar_Registros('citas', $parametros);
         return $resp;
     }
 

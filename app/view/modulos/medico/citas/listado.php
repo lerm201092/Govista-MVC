@@ -392,7 +392,8 @@ ul#tabs-ver .nav-item .nav-link{
             for(var i=0; i < resp.citas.length; i++){
                 html+="<tr>";
                 html+="<td  class='d-none d-sm-none d-md-table-cell '>("+resp.citas[i].tipodoc+") "+resp.citas[i].numdoc+"</td>";
-                html+="<td>"+capitalize(resp.citas[i].name1)+" "+capitalize(resp.citas[i].surname1)+"</td>";
+                html+="<td>"+capitalize(resp.citas[i].nombre1)+' '+( resp.citas[i].nombre2 ? capitalize(resp.citas[i].nombre2) : '' );
+                html+= " "+capitalize(resp.citas[i].apellido1)+' '+( resp.citas[i].apellido2 ? capitalize(resp.citas[i].apellido2) : '' )+"</td>";
                 html+="<td>"+resp.citas[i].start+"</td>";
                 html+="<td class='pl-3'>";
                     html+="<a href='/apps/rol-medico/citas/ver/"+resp.citas[i].cita_id+"' title='Ver Paciente'><i class='cl-azul fas fa-eye'></i></a>";
