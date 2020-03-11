@@ -50,23 +50,23 @@
             break;
             case '3':
                 $cond1 = [ 'state' => "'AC'", 'id_medico' => $_SESSION['gv_iduser'], 'id_empresa' => $_SESSION['gv_idempresa'] ] ;
-                $cond2 = [ 'u.roluser' => '4', 'u.id' => 'ue.id_usuario', 'ue.id_empresa' => $_SESSION['gv_idempresa'] ];
-                $cond3 = [ 'u.roluser' => '4', 'u.id' => 'ue.id_usuario', 'ue.id_empresa' => $_SESSION['gv_idempresa'], 'u.state' => "'AC'" ];
-                $cond4 = [ 'u.roluser' => '4', 'u.id' => 'ue.id_usuario', 'ue.id_empresa' => $_SESSION['gv_idempresa'], 'u.state' => "'IN'" ];
+                $cond2 = [ 'u.roluser' => '4', 'u.id_empresa' => $_SESSION['gv_idempresa'] ];
+                $cond3 = [ 'u.roluser' => '4', 'u.id_empresa' => $_SESSION['gv_idempresa'], 'u.state' => "'AC'" ];
+                $cond4 = [ 'u.roluser' => '4', 'u.id_empresa' => $_SESSION['gv_idempresa'], 'u.state' => "'IN'" ];
                 $cond5 = [ 'c.id_medico' => $_SESSION['gv_iduser'], 'c.id_empresa' => $_SESSION['gv_idempresa'] ];
                 $cond6 = [ 'c.id_medico' => $_SESSION['gv_iduser'], 'c.id_empresa' => $_SESSION['gv_idempresa'], 'ce.state' => "'AC'"];
                 $cond7 = [ 'c.id_medico' => $_SESSION['gv_iduser'], 'c.id_empresa' => $_SESSION['gv_idempresa'], 'ce.state' => "'IN'"];
                 $cond8 = [ 'c.id_medico' => $_SESSION['gv_iduser'], 'c.id_empresa' => $_SESSION['gv_idempresa'], 'ce.state' => "'OK'"];
 
                 $resp = array(
-                    "item1"  => $BD->Cantidad_Registros( null, 'citas', $cond1 ),
-                    "item2"  => $BD->Cantidad_Registros( 'u.id', 'usuarios u, usuario_empresa ue',  $cond2 ),
-                    "item3"  => $BD->Cantidad_Registros( 'u.id', 'usuarios u, usuario_empresa ue',  $cond3 ),        
-                    "item4"  => $BD->Cantidad_Registros( 'u.id', 'usuarios u, usuario_empresa ue',  $cond4 ),   
-                    "item5"  => $BD->Cantidad_Registros( 'ce.id', 'cita_ejercicio ce left join citas c on c.id = ce.id_cita', $cond5 ),
-                    "item6"  => $BD->Cantidad_Registros( 'ce.id', 'cita_ejercicio ce left join citas c on c.id = ce.id_cita', $cond6 ),
-                    "item7"  => $BD->Cantidad_Registros( 'ce.id', 'cita_ejercicio ce left join citas c on c.id = ce.id_cita', $cond7 ),
-                    "item8"  => $BD->Cantidad_Registros( 'ce.id', 'cita_ejercicio ce left join citas c on c.id = ce.id_cita', $cond8 ),
+                    "item1"  => $BD->Cantidad_Registros(null, 'citas',        $cond1 ),
+                    "item2"  => $BD->Cantidad_Registros(null, 'usuarios u',   $cond2 ),
+                    "item3"  => $BD->Cantidad_Registros(null, 'usuarios u',   $cond3 ),
+                    "item4"  => $BD->Cantidad_Registros(null, 'usuarios u',   $cond4 ),
+                    "item5"  => '0',
+                    "item6"  => '0',
+                    "item7"  => '0',
+                    "item8"  => '0'
                 );  
 
             break;
