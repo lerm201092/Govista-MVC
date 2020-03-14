@@ -1,9 +1,9 @@
 <?php
 
-  if (@!$_SESSION['gv_id_user']) {
+  if (@!$_SESSION['gv_iduser']) {
     header('Location:'.SERVER_FOLDER.'apps/login');
   }else{
-    if($_SESSION["gv_rol_user"] != 4){
+    if($_SESSION["gv_rol"] != 4){
       header('Location:'.SERVER_FOLDER.'apps/login');
     }
   }

@@ -26,7 +26,7 @@
         switch ($rol) {
             case '1':
                 $resp = array(
-                    "item1"  => $BD->Cantidad_Registros(null, 'empresas'),
+                    "item1"  => $BD->Cantidad_Registros(null, 'empresas'), // 1. campos , 2. nombre de tabla, 3. condicionales
                     "item2"  => $BD->Cantidad_Registros(null, 'usuarios', [ 'roluser' => '4' ] ),
                     "item3"  => $BD->Cantidad_Registros(null, 'usuarios', [ 'roluser' => '4', 'state' => "'AC'" ] ),           
                     "item4"  => $BD->Sumar_Campo('history_exercises h', 'h.session'),
@@ -63,6 +63,30 @@
                     "item2"  => $BD->Cantidad_Registros(null, 'usuarios u',   $cond2 ),
                     "item3"  => $BD->Cantidad_Registros(null, 'usuarios u',   $cond3 ),
                     "item4"  => $BD->Cantidad_Registros(null, 'usuarios u',   $cond4 ),
+                    "item5"  => '0',
+                    "item6"  => '0',
+                    "item7"  => '0',
+                    "item8"  => '0'
+                );  
+
+            break;
+
+            case '4':
+                $cond2 = [ 'state' => "'AC'", 'id_paciente' => $_SESSION['gv_iduser'], 'id_empresa' => $_SESSION['gv_idempresa'] ] ;
+                $cond3 = [ 'state' => "'OK'", 'id_paciente' => $_SESSION['gv_iduser'], 'id_empresa' => $_SESSION['gv_idempresa'] ] ;
+                $cond4 = [ 'state' => "'IN'", 'id_paciente' => $_SESSION['gv_iduser'], 'id_empresa' => $_SESSION['gv_idempresa'] ] ;
+                $cond5 = [ 'c.id_medico' => $_SESSION['gv_iduser'], 'c.id_empresa' => $_SESSION['gv_idempresa'] ];
+                $cond6 = [ 'c.id_medico' => $_SESSION['gv_iduser'], 'c.id_empresa' => $_SESSION['gv_idempresa'], 'ce.state' => "'AC'"];
+                $cond7 = [ 'c.id_medico' => $_SESSION['gv_iduser'], 'c.id_empresa' => $_SESSION['gv_idempresa'], 'ce.state' => "'IN'"];
+                $cond8 = [ 'c.id_medico' => $_SESSION['gv_iduser'], 'c.id_empresa' => $_SESSION['gv_idempresa'], 'ce.state' => "'OK'"];
+
+                $total = intVal($BD->Cantidad_Registros(null, 'citas',   $cond2 )) + intVal($BD->Cantidad_Registros(null, 'citas',   $cond3 )) + intVal($BD->Cantidad_Registros(null, 'citas',   $cond4 ));
+
+                $resp = array(
+                    "item1"  => $total,
+                    "item2"  => $BD->Cantidad_Registros(null, 'citas',   $cond2 ),
+                    "item3"  => $BD->Cantidad_Registros(null, 'citas',   $cond3 ),
+                    "item4"  => $BD->Cantidad_Registros(null, 'citas',   $cond4 ),
                     "item5"  => '0',
                     "item6"  => '0',
                     "item7"  => '0',

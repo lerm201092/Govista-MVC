@@ -22,8 +22,8 @@
                         </div>
                         <div class="col-9 pl-0 pr-2">
                             <div class="text-right">
-                                <p class="titulos-cajas">Citas Activas</p>
-                                <p id="citasActivas" class="valores-cajas">0</p>
+                                <p class="titulos-cajas">Citas Registradas</p>
+                                <p id="item1" class="valores-cajas">0</p>
                             </div>
                         </div>
                     </div>
@@ -43,8 +43,8 @@
                         </div>
                         <div class="col-9 pl-0 pr-2">
                             <div class="text-right">
-                                <p class="titulos-cajas">Citas Realizadas</p>
-                                <p id="citasRealizadas" class="valores-cajas">0</p>
+                                <p class="titulos-cajas">Citas Activas</p>
+                                <p id="item2" class="valores-cajas">0</p>
                             </div>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                         <div class="col-9 pl-0 pr-2">
                             <div class="text-right">
                                 <p class="titulos-cajas">Citas Inactivas</p>
-                                <p id="citasInactivas" class="valores-cajas">0</p>
+                                <p id="item3" class="valores-cajas">0</p>
                             </div>
                         </div>
                     </div>
@@ -87,8 +87,8 @@
                         </div>
                         <div class="col-9 pl-0 pr-2">
                             <div class="text-right">
-                                <p class="titulos-cajas">Total Citas</p>
-                                <p id="totalCitas" class="valores-cajas">0</p>
+                                <p class="titulos-cajas">Citas Incumplidas</p>
+                                <p id="item4" class="valores-cajas">0</p>
                             </div>
                         </div>
                     </div>
@@ -109,7 +109,7 @@
                         <div class="col-9 pl-0 pr-2">
                             <div class="text-right">
                                 <p class="titulos-cajas">Ejercicios Asignados</p>
-                                <p id="totalEjercicios" class="valores-cajas">0</p>
+                                <p id="item5" class="valores-cajas">0</p>
                             </div>
                         </div>
                     </div>
@@ -131,7 +131,7 @@
                         <div class="col-9 pl-0 pr-2">
                             <div class="text-right">
                                 <p class="titulos-cajas">Ejercicios Activos</p>
-                                <p id="ejerciciosActivos" class="valores-cajas">0</p>
+                                <p id="item6" class="valores-cajas">0</p>
                             </div>
                         </div>
                     </div>
@@ -153,7 +153,7 @@
                         <div class="col-9 pl-0 pr-2">
                             <div class="text-right">
                                 <p class="titulos-cajas">Ejercicios Incumplidos</p>
-                                <p id="ejerciciosIncumplidos" class="valores-cajas">0</p>
+                                <p id="item7" class="valores-cajas">0</p>
                             </div>
                         </div>
                     </div>
@@ -175,7 +175,7 @@
                         <div class="col-9 pl-0 pr-2">
                             <div class="text-right">
                                 <p class="titulos-cajas">Ejercicios Realizados</p>
-                                <p id="ejerciciosRealizados" class="valores-cajas">0</p>
+                                <p id="item8" class="valores-cajas">0</p>
                             </div>
                         </div>
                     </div>
@@ -207,44 +207,31 @@
 
 
 
-
 <!-- / Contenedor de la pagina -->
 <?php include "../../layouts/paciente/footer.php";?>
 <!-- scripts -->
-    <script>
+<script>
         cargando();
         $("#li-resumen").addClass("active");   
-        
-        var url = '/apps/controller/resumen';
-        var data = {funcion: "resumen_medico", parametros: ""};
+        cargar();
 
-        fetch(url, {
-            method: 'POST', // or 'PUT'
-            body: JSON.stringify(data), // data can be `string` or {object}!
-            headers:{
-                'Content-Type': 'application/json'
-            }
-        }).then(res => res.json())
-        .catch(error =>  {
-            console.log(error);
-            swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
-        })
-        .then(resp => {
-            $("#citasActivas").text(resp["citasActivas"]);
-            $("#citasRealizadas").text(resp["citasRealizadas"]);
-            $("#citasInactivas").text(resp["CitasRealizadas"]);
-            $("#totalCitas").text(resp["totalCitas"]);
-
-            $("#totalEjercicios").text(resp["totalEjercicios"]);
-            $("#ejerciciosActivos").text(resp["ejerciciosActivos"]);
-            $("#ejerciciosIncumplidos").text(resp["ejerciciosIncumplidos"]);
-            $("#ejerciciosRealizados").text(resp["ejerciciosRealizados"]);
-            cargarGraficos(resp);
-
-            setTimeout(() => {
-                swal.close();
-            }, 200);    
-        });    
+        function cargar(){
+            var url = '/apps/controller/resumen';
+            var data = { funcion : "resumen", parametros : { } };
+            var miInit = {  method: 'POST', body: JSON.stringify(data), headers:{ 'Content-Type': 'application/json' }};
+            fetch(url, miInit).then(res => res.json()).catch(error =>  {
+                console.log(error);
+                swal("GoVista", "¡Se ha generado un error en el servidor, por favor contacte al administrador!", "error");
+            }).then(resp => {
+                $("p.valores-cajas").each(function(){
+                    var id = $(this).attr("id");
+                    $(this).text( resp[id] ?? 0 );
+                });
+                cargarGraficos(resp);
+                setTimeout(() => {  swal.close(); }, 200);    
+            });   
+        }
+ 
 
         function cargando(){
             swal('Cargando, espere un momento por favor ... ',{
@@ -293,10 +280,10 @@
         
             /* Agregar una serie de datos básica con seis etiquetas y valores */
             var data = {
-            labels: [' Total Citas', 'Citas activas', 'Citas inactivas', 'Citas realizadas'],
+            labels: ['Citas Activas', 'Total Pacientes', 'Pacientes Activos', 'Pacientes Inactivos'],
             series: [
                 {
-                data: [ resp["totalCitas"], resp["citasActivas"], resp["citasInactivas"], resp["citasRealizadas"]]
+                data: [ resp["item1"], resp["item2"], resp["item3"], resp["item4"]]
                 }
             ]
             };
@@ -306,15 +293,16 @@
  
             
             var data2 = {
-                labels: [' Ejercicios Asignados', 'Ejercicios activos', 'Ejercicios incumplidos', 'Ejercicios realizados'],
+                labels: ['Ejercicios Asignados', 'Ejercicios Activos', 'Ejercicios Incumplidos', 'Ejercicios Realizados'],
                 series: [
                     {
-                    data: [ resp["totalEjercicios"], resp["ejerciciosActivos"], resp["ejerciciosIncumplidos"], resp["ejerciciosRealizados"] ]
+                    data: [ resp["item5"], resp["item6"], resp["item7"], resp["item8"] ]
                     }
                 ]
             };
             new Chartist.Line('#my-chart2', data2, options, responsiveOptions);
         }
+    </script>
     </script>
 <!-- / scripts -->
 <?php include "../../layouts/paciente/fin.php";?>
